@@ -1,6 +1,17 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+
 function App() {
   return (
-    <div className="bg-blue-500 text-blue-900 p-10">Tailwind is working!</div>
+    <BrowserRouter basename="/kmrvegetables">
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

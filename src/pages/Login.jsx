@@ -1,60 +1,68 @@
-// Import hooks and router helpers
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { app } from "../firebase";
+import { getAuth } from "firebase/auth";
 
 function Login() {
-  // State variables to store user input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // React Router hook used for redirection
+  const [error, setError] = useState(""); // State for errors
+  const auth = getAuth(app);
   const navigate = useNavigate();
-
-  // Function runs when the form is submitted
-  const handleLogin = (e) => {
-    e.preventDefault(); // Prevents page reload on submit
-
-    // ✅ Fake authentication check
-    // Later you will replace this with Firebase/Backend API
-    if (email === "test@example.com" && password === "123456") {
-      console.log("Login successful!");
-      navigate("/home"); // Redirect to Home page
-    } else {
-      alert("Invalid email or password!");
+  const googleprovider = new GoogleAuthProvider();
+  // login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("loggedIn");
+      navigate("/home");
+    } catch (error) {
+      console.log(error.message);
+      setError(error.message); // Show error in popup
+    }
+  };
+  // google login handle
+  const handleGooglelogin = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithPopup(auth, googleprovider);
+      console.log("google login successful");
+      navigate("/home");
+    } catch (error) {
+      console.log(error.message);
+      setError(error.message); // Show error in popup
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-green-50">
+    <div className="flex items-center justify-center h-screen bg-green-50 relative">
       <div className="bg-white p-8 rounded-2xl shadow-md w-96">
-        {/* Page Title */}
         <h2 className="text-2xl font-bold text-center text-green-700 mb-6">
           Login
         </h2>
-
-        {/* Login Form */}
         <form onSubmit={handleLogin}>
-          {/* Email Field */}
           <input
             type="email"
             placeholder="Email"
             className="w-full border p-2 mb-4 rounded"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Save input to state
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
-
-          {/* Password Field */}
           <input
             type="password"
             placeholder="Password"
             className="w-full border p-2 mb-4 rounded"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} // Save input to state
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
@@ -62,8 +70,12 @@ function Login() {
             Login
           </button>
         </form>
-
-        {/* Link to Register page */}
+        <button
+          className="w-full rounded-lg mt-5 bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
+          onClick={handleGooglelogin}
+        >
+          Continue with Google
+        </button>
         <p className="text-center mt-4 text-gray-600">
           Don’t have an account?{" "}
           <Link to="/register" className="text-green-600 font-semibold">
@@ -71,6 +83,22 @@ function Login() {
           </Link>
         </p>
       </div>
+
+      {/* Error Popup Modal */}
+      {error && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+            <h3 className="text-red-600 font-bold text-lg mb-3">Error</h3>
+            <p className="text-gray-700 mb-4">{error}</p>
+            <button
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              onClick={() => setError("")}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

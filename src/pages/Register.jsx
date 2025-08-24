@@ -1,79 +1,89 @@
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { useState } from "react";
+import { app } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
-  // State variables to store user input
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Used for redirecting after successful registration
+  const auth = getAuth(app);
   const navigate = useNavigate();
-
-  // Function runs when register form is submitted
-  const handleRegister = (e) => {
+  const googleProvider = new GoogleAuthProvider();
+  // signup
+  const handleSignup = async (e) => {
     e.preventDefault();
-
-    // ✅ Fake registration (replace later with backend/Firebase)
-    console.log("User registered:", { name, email, password });
-
-    // Redirect to home after successful registration
-    navigate("/");
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log("✅ Signup successful");
+      navigate("/home");
+    } catch (err) {
+      console.log("❌ Signup error:", err.message);
+    }
+  };
+  //googlesignup
+  const handleGoogleSignup = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      console.log("✅ Google signup successful");
+      navigate("/home");
+    } catch (err) {
+      console.log("❌ Google signup error:", err.message);
+    }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-green-50">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-96">
-        {/* Title */}
-        <h2 className="text-2xl font-bold text-center text-green-700 mb-6">
-          Register
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-700">
+          Register 👋
         </h2>
-
-        {/* Register Form */}
-        <form onSubmit={handleRegister}>
-          {/* Name Field */}
-          <input
-            type="text"
-            placeholder="Full Name"
-            className="w-full border p-2 mb-4 rounded"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-
-          {/* Email Field */}
+        <form onSubmit={handleSignup} className="space-y-4">
           <input
             type="email"
-            placeholder="Email"
-            className="w-full border p-2 mb-4 rounded"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             required
           />
-
-          {/* Password Field */}
           <input
             type="password"
-            placeholder="Password"
-            className="w-full border p-2 mb-4 rounded"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             required
           />
-
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+            className="w-full rounded-lg bg-blue-600 p-3 font-semibold text-white transition duration-300 hover:bg-blue-700"
           >
-            Register
+            Sign up
           </button>
         </form>
 
-        {/* Link to Login */}
+        <div className="my-6 flex items-center justify-center">
+          <div className="h-px w-1/4 bg-gray-300"></div>
+          <span className="mx-2 text-gray-500">OR</span>
+          <div className="h-px w-1/4 bg-gray-300"></div>
+        </div>
+
+        <button
+          className="w-full rounded-lg bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
+          onClick={handleGoogleSignup}
+        >
+          Continue with Google
+        </button>
+
         <p className="text-center mt-4 text-gray-600">
-          Already have an account?{" "}
-          <Link to="/" className="text-green-600 font-semibold">
+          Already have an account?
+          <Link to="/" className="ml-1 text-green-600 font-semibold">
             Login
           </Link>
         </p>

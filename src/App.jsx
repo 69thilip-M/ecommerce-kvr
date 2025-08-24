@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 function App() {
   return (
     <BrowserRouter basename="/kmrvegetables">
+      {" "}
+      {/* ✅ use your repo name here */}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />

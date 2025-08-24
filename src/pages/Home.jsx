@@ -1,6 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // clear session or token if you are storing any
+    localStorage.removeItem("authToken");
+    // navigate back to login page in the SAME TAB
+    navigate("/");
+  };
   return (
     <div className="h-screen bg-green-100 flex flex-col">
       {/* Navbar */}
@@ -43,15 +50,18 @@ function Home() {
           <Link to="/cart" className="hover:text-yellow-300 transition">
             Cart
           </Link>
-          <Link to="/cart" className="hover:text-yellow-300 transition">
+          <Link to="/add-product" className="hover:text-yellow-300 transition">
             Add Product
           </Link>
           <Link to="/profile" className="hover:text-yellow-300 transition">
             👤 Profile
           </Link>
-          <Link to="/logout" className="hover:text-yellow-300 transition">
+          <button
+            onClick={handleLogout}
+            className="hover:text-yellow-300 transition"
+          >
             🚪 Logout
-          </Link>
+          </button>
         </div>
 
         {/* Mobile Menu Button */}

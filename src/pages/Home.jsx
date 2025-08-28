@@ -25,6 +25,9 @@ function Home() {
           <Link to="/products" className="hover:text-yellow-300 transition">
             Products
           </Link>
+          <Link to="/about" className="hover:text-yellow-300 transition">
+            About
+          </Link>
 
           {/* Categories Dropdown */}
           {/* <div className="relative group">

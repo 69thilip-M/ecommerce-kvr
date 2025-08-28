@@ -27,7 +27,7 @@ function Home() {
           </Link>
 
           {/* Categories Dropdown */}
-          <div className="relative group">
+          {/* <div className="relative group">
             <button className="hover:text-yellow-300 transition">
               Categories
             </button>
@@ -45,14 +45,14 @@ function Home() {
                 Vegetables
               </Link>
             </div>
-          </div>
+          </div> */}
 
           <Link to="/cart" className="hover:text-yellow-300 transition">
             Cart
           </Link>
-          <Link to="/add-product" className="hover:text-yellow-300 transition">
+          {/* <Link to="/add-product" className="hover:text-yellow-300 transition">
             Add Product
-          </Link>
+          </Link> */}
           <Link to="/profile" className="hover:text-yellow-300 transition">
             👤 Profile
           </Link>

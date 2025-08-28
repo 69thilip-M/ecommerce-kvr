@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Navbar from "../components/Navbar"; // Adjust path if needed
+import Footer from "../components/Footer";
 
 function AppProduct() {
   const [price, setPrice] = useState(50); // default price

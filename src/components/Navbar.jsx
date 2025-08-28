@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -8,30 +8,38 @@ function Navbar() {
     navigate("/");
   };
 
+  const navLinkClass = ({ isActive }) =>
+    isActive
+      ? "text-yellow-300 font-semibold"
+      : "hover:text-yellow-300 transition";
+
   return (
-    <nav className="bg-green-600 text-white px-6 py-4 shadow-md flex items-center justify-between">
+    <nav className="bg-green-600 text-white px-6 py-4 shadow-md flex items-center justify-between w-full">
       {/* Logo */}
-      <Link to="/home" className="text-2xl font-bold flex items-center gap-2">
+      <NavLink
+        to="/home"
+        className="text-2xl font-bold flex items-center gap-2"
+      >
         🌽🍎 Veggie Store
-      </Link>
+      </NavLink>
 
       {/* Menu Links */}
       <div className="hidden md:flex gap-6 text-lg font-medium">
-        <Link to="/home" className="hover:text-yellow-300 transition">
+        <NavLink to="/home" className={navLinkClass}>
           Home
-        </Link>
-        <Link to="/products" className="hover:text-yellow-300 transition">
+        </NavLink>
+        <NavLink to="/products" className={navLinkClass}>
           Products
-        </Link>
-        <Link to="/about" className="hover:text-yellow-300 transition">
+        </NavLink>
+        <NavLink to="/about" className={navLinkClass}>
           About
-        </Link>
-        <Link to="/cart" className="hover:text-yellow-300 transition">
+        </NavLink>
+        <NavLink to="/cart" className={navLinkClass}>
           Cart
-        </Link>
-        <Link to="/profile" className="hover:text-yellow-300 transition">
+        </NavLink>
+        <NavLink to="/profile" className={navLinkClass}>
           👤 Profile
-        </Link>
+        </NavLink>
         <button
           onClick={handleLogout}
           className="hover:text-yellow-300 transition"

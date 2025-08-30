@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import productsData from "./productsData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { FaCartPlus, FaTrash } from "react-icons/fa";
 
 function Products() {
   const [category, setCategory] = useState("all");
@@ -129,16 +130,16 @@ function Products() {
                   {isInCart(product.id) ? (
                     <button
                       onClick={() => handleRemoveFromCart(product.id)}
-                      className="w-full mt-auto bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition"
+                      className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition"
                     >
-                      Remove from Cart
+                      <FaTrash className="text-lg" /> Remove from Cart
                     </button>
                   ) : (
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="w-full mt-auto bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+                      className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition"
                     >
-                      Add to Cart
+                      <FaCartPlus className="text-lg" /> Add to Cart
                     </button>
                   )}
                 </div>

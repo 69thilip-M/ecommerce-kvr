@@ -1,3 +1,5 @@
+import { FaGooglePlay, FaApple } from "react-icons/fa";
+
 function Footer() {
   return (
     <footer className="w-full bg-green-600 text-white py-10">
@@ -64,11 +66,11 @@ function Footer() {
         <div>
           <h2 className="text-xl font-semibold mb-4">Download App</h2>
           <div className="flex flex-col space-y-3">
-            <button className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800">
-              Google Play
+            <button className="flex items-center justify-center gap-2 bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800">
+              <FaGooglePlay size={18} /> Google Play
             </button>
-            <button className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800">
-              App Store
+            <button className="flex items-center justify-center gap-2 bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800">
+              <FaApple size={18} /> App Store
             </button>
           </div>
         </div>

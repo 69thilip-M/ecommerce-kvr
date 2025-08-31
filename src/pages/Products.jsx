@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import productsData from "./productsData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { FaCartPlus, FaTrash } from "react-icons/fa";
+import { FaCartPlus, FaTrash, FaPlus } from "react-icons/fa"; // ⬅️ Added FaPlus
 import { useCart } from "../context/CartContext";
 
 function Products() {
@@ -25,9 +25,19 @@ function Products() {
       <Navbar />
 
       <div className="p-6 flex-grow">
-        <h1 className="text-3xl font-bold mb-6 text-center text-green-700">
-          Our Products
-        </h1>
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-green-700 text-center md:text-left">
+            Our Products
+          </h1>
+
+          {/* ✅ Add Product Button */}
+          <button
+            onClick={() => navigate("/add-product")}
+            className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg font-medium shadow-md hover:bg-green-700 transition"
+          >
+            <FaPlus /> Add Product
+          </button>
+        </div>
 
         {/* ✅ Category Tabs + Search */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">

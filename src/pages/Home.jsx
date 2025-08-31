@@ -1,8 +1,11 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import productsData from "../pages/productsData"; // ✅ import data
+import Testimonials from "../components/Testimonials";
 function Home() {
   const navigate = useNavigate();
+
   return (
     <div className="min-h-screen flex flex-col bg-green-50">
       {/* Navbar */}
@@ -79,6 +82,93 @@ function Home() {
           <p className="text-gray-600 mt-2">
             Freshness doesn’t have to be expensive — we keep it affordable.
           </p>
+        </div>
+      </div>
+
+      {/* Categories Section */}
+      <div className="bg-green-50 py-16 px-6 text-center">
+        <h2 className="text-3xl font-bold text-green-800 mb-8">
+          Shop by Category 🍇🥬
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white shadow rounded-xl p-6 hover:shadow-lg transition">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/415/415682.png"
+              alt="Fruits"
+              className="w-24 h-24 mx-auto mb-4"
+            />
+            <h3 className="text-xl font-semibold text-green-700">Fruits</h3>
+          </div>
+          <div className="bg-white shadow rounded-xl p-6 hover:shadow-lg transition">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/766/766083.png"
+              alt="Vegetables"
+              className="w-24 h-24 mx-auto mb-4"
+            />
+            <h3 className="text-xl font-semibold text-green-700">Vegetables</h3>
+          </div>
+          <div className="bg-white shadow rounded-xl p-6 hover:shadow-lg transition">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1046/1046786.png"
+              alt="Organic"
+              className="w-24 h-24 mx-auto mb-4"
+            />
+            <h3 className="text-xl font-semibold text-green-700">
+              Organic Items
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      {/* Best Selling Section (First 4 Products) */}
+      <div className="bg-white py-16 px-6 text-center">
+        <h2 className="text-3xl font-bold text-green-800 mb-8">
+          Best Sellers 🌟
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {productsData.slice(0, 4).map((product) => (
+            <div
+              key={product.id}
+              className="bg-green-50 shadow rounded-xl p-6 hover:shadow-lg transition"
+            >
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-24 h-24 mx-auto mb-4 rounded-lg object-cover"
+              />
+              <h3 className="text-lg font-semibold text-green-700">
+                {product.name}
+              </h3>
+              <p className="text-gray-600 mt-2">{product.description}</p>
+              <p className="mt-2 font-bold text-green-800">₹{product.price}</p>
+              <button
+                onClick={() => navigate("/products")}
+                className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              >
+                View More 🛒
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Testimonials Section */}
+      <Testimonials></Testimonials>
+
+      {/* Newsletter Section */}
+      <div className="bg-green-700 py-12 px-6 text-center text-white">
+        <h2 className="text-2xl font-bold mb-4">
+          Subscribe & Get Exclusive Deals 📩
+        </h2>
+        <div className="flex justify-center gap-4 flex-col md:flex-row">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="px-4 py-2 rounded-lg text-gray-800 w-72"
+          />
+          <button className="px-6 py-2 bg-white text-green-700 rounded-lg font-semibold hover:bg-green-100">
+            Subscribe
+          </button>
         </div>
       </div>
 

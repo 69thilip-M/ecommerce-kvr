@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import productsData from "../pages/productsData"; // ✅ import data
 import Testimonials from "../components/Testimonials";
+import Newsletter from "../components/Newsletter";
 function Home() {
   const navigate = useNavigate();
 
@@ -152,26 +153,11 @@ function Home() {
         </div>
       </div>
 
+      {/* Newsletter Section */}
+      <Newsletter></Newsletter>
+
       {/* Testimonials Section */}
       <Testimonials></Testimonials>
-
-      {/* Newsletter Section */}
-      <div className="bg-green-700 py-12 px-6 text-center text-white">
-        <h2 className="text-2xl font-bold mb-4">
-          Subscribe & Get Exclusive Deals 📩
-        </h2>
-        <div className="flex justify-center gap-4 flex-col md:flex-row">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="px-4 py-2 rounded-lg text-gray-800 w-72"
-          />
-          <button className="px-6 py-2 bg-white text-green-700 rounded-lg font-semibold hover:bg-green-100">
-            Subscribe
-          </button>
-        </div>
-      </div>
-
       {/* Footer */}
       <Footer />
     </div>

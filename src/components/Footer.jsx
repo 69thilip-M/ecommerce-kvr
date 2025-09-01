@@ -1,8 +1,17 @@
 import { FaGooglePlay, FaApple } from "react-icons/fa";
+import { useTheme } from "../context/ThemeContext"; // ✅ import theme hook
 
 function Footer() {
+  const { theme } = useTheme(); // ✅ get current theme (light/dark)
+
   return (
-    <footer className="w-full bg-green-600 text-white py-10">
+    <footer
+      className={`w-full py-10 transition-colors duration-300 ${
+        theme === "dark"
+          ? "bg-gray-900 text-gray-200"
+          : "bg-green-600 text-white"
+      }`}
+    >
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-6">
         {/* Column 1 - About */}
         <div>
@@ -66,10 +75,22 @@ function Footer() {
         <div>
           <h2 className="text-xl font-semibold mb-4">Download App</h2>
           <div className="flex flex-col space-y-3">
-            <button className="flex items-center justify-center gap-2 bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800">
+            <button
+              className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg transition-colors ${
+                theme === "dark"
+                  ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                  : "bg-black text-white hover:bg-gray-800"
+              }`}
+            >
               <FaGooglePlay size={18} /> Google Play
             </button>
-            <button className="flex items-center justify-center gap-2 bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800">
+            <button
+              className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg transition-colors ${
+                theme === "dark"
+                  ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                  : "bg-black text-white hover:bg-gray-800"
+              }`}
+            >
               <FaApple size={18} /> App Store
             </button>
           </div>
@@ -77,7 +98,11 @@ function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="mt-10 text-center border-t border-white/20 pt-4 text-sm">
+      <div
+        className={`mt-10 text-center border-t pt-4 text-sm transition-colors ${
+          theme === "dark" ? "border-gray-700 text-gray-400" : "border-white/20"
+        }`}
+      >
         © {new Date().getFullYear()} FreshMart. All rights reserved.
       </div>
     </footer>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import productsData from "./productsData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { FaCartPlus, FaTrash, FaPlus } from "react-icons/fa"; // ⬅️ Added FaPlus
+import { FaCartPlus, FaTrash, FaPlus } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 
 function Products() {
@@ -21,25 +21,25 @@ function Products() {
   });
 
   return (
-    <div className="min-h-screen bg-green-100 flex flex-col">
+    <div className="min-h-screen bg-green-100 dark:bg-gray-900 flex flex-col transition-colors duration-300">
       <Navbar />
 
       <div className="p-6 flex-grow">
+        {/* Header + Add Product */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-green-700 text-center md:text-left">
+          <h1 className="text-3xl font-bold text-green-700 dark:text-green-400 text-center md:text-left">
             Our Products
           </h1>
 
-          {/* ✅ Add Product Button */}
           <button
             onClick={() => navigate("/add-product")}
-            className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg font-medium shadow-md hover:bg-green-700 transition"
+            className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
           >
             <FaPlus /> Add Product
           </button>
         </div>
 
-        {/* ✅ Category Tabs + Search */}
+        {/* Category Tabs + Search */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-3">
@@ -50,7 +50,7 @@ function Products() {
                 className={`px-4 py-2 rounded-full font-medium transition ${
                   category === cat
                     ? "bg-green-600 text-white shadow-md"
-                    : "bg-white text-green-700 border border-green-600 hover:bg-green-50"
+                    : "bg-white dark:bg-gray-800 text-green-700 dark:text-green-300 border border-green-600 hover:bg-green-50 dark:hover:bg-gray-700"
                 }`}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -64,17 +64,17 @@ function Products() {
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-64 px-4 py-2 rounded-lg border border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full md:w-64 px-4 py-2 rounded-lg border border-green-400 dark:border-green-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
 
-        {/* ✅ Product Grid */}
+        {/* Product Grid */}
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl"
               >
                 {/* Image */}
                 <div
@@ -93,26 +93,28 @@ function Products() {
 
                 {/* Details */}
                 <div className="p-5 flex flex-col justify-between h-44">
-                  <h2 className="text-lg font-bold text-gray-800 mb-2">
+                  <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">
                     {product.name}
                   </h2>
 
-                  <p className="text-green-700 font-semibold text-xl mb-3">
+                  <p className="text-green-700 dark:text-green-400 font-semibold text-xl mb-3">
                     ₹{product.price}{" "}
-                    <span className="text-sm text-gray-500">/ 1kg</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      / 1kg
+                    </span>
                   </p>
 
                   {isInCart(product.id) ? (
                     <button
                       onClick={() => removeFromCart(product.id)}
-                      className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition"
+                      className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
                     >
                       <FaTrash className="text-lg" /> Remove from Cart
                     </button>
                   ) : (
                     <button
                       onClick={() => addToCart(product)}
-                      className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+                      className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
                     >
                       <FaCartPlus className="text-lg" /> Add to Cart
                     </button>
@@ -122,7 +124,7 @@ function Products() {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-600 mt-10">
+          <p className="text-center text-gray-600 dark:text-gray-400 mt-10">
             No products found for "{searchTerm}"
           </p>
         )}

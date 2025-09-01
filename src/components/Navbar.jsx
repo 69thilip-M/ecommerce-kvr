@@ -1,7 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext"; // ✅ import
 
 function Navbar() {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -14,7 +16,7 @@ function Navbar() {
       : "hover:text-yellow-300 transition";
 
   return (
-    <nav className="bg-green-600 text-white px-6 py-4 shadow-md flex items-center justify-between w-full">
+    <nav className="bg-green-600 dark:bg-gray-900 text-white px-6 py-4 shadow-md flex items-center justify-between w-full">
       {/* Logo */}
       <NavLink
         to="/home"
@@ -45,6 +47,14 @@ function Navbar() {
           className="hover:text-yellow-300 transition"
         >
           🚪 Logout
+        </button>
+
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="ml-4 px-3 py-1 rounded bg-white text-black dark:bg-gray-700 dark:text-white"
+        >
+          {theme === "light" ? "🌙 Dark" : "☀️ Light"}
         </button>
       </div>
 

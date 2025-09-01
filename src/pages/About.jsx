@@ -1,66 +1,76 @@
-import Navbar from "../components/Navbar"; // Adjust path if needed
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+
 function About() {
   return (
-    <div className="h-screen bg-green-100 flex flex-col">
+    <div className="min-h-screen bg-green-100 dark:bg-gray-900 flex flex-col transition-colors duration-300">
       {/* Navbar */}
       <Navbar />
-      <div className="bg-green-100">
-        <div className="p-6 max-w-5xl mx-auto ">
+
+      <div className="bg-green-100 dark:bg-gray-900 flex-grow transition-colors duration-300">
+        <div className="p-6 max-w-5xl mx-auto">
           {/* Page Title */}
-          <h1 className="text-4xl font-bold text-center text-green-700 mb-6">
+          <h1 className="text-4xl font-bold text-center text-green-700 dark:text-green-400 mb-6">
             About Us
           </h1>
 
           {/* Company Info */}
-          <div className="bg-white shadow-lg rounded-2xl p-6 mb-8">
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 mb-8 transition-colors duration-300">
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               Welcome to{" "}
-              <span className="font-semibold text-green-700">FreshMart</span> –
-              your one-stop shop for fresh vegetables, fruits, and organic
+              <span className="font-semibold text-green-700 dark:text-green-400">
+                FreshMart
+              </span>{" "}
+              – your one-stop shop for fresh vegetables, fruits, and organic
               products. We are committed to delivering the best quality products
               directly from farms to your doorstep.
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               Founded in 2024, our mission is to make healthy and organic living
               accessible to everyone. With a wide range of fresh produce, we
               ensure that your family enjoys the goodness of nature every day.
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
               Thank you for choosing FreshMart – where freshness meets trust. 🌱
             </p>
           </div>
 
           {/* Team Info */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-green-700 mb-4">
+            <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-4">
               Our Team
             </h2>
             <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <li className="bg-green-50 p-4 rounded-xl shadow">
-                <h3 className="text-xl font-bold">Kural</h3>
-                <p className="text-gray-600">Founder & CEO</p>
+              <li className="bg-green-50 dark:bg-gray-700 p-4 rounded-xl shadow">
+                <h3 className="text-xl font-bold dark:text-white">Kural</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Founder & CEO
+                </p>
               </li>
-              <li className="bg-green-50 p-4 rounded-xl shadow">
-                <h3 className="text-xl font-bold">Thilip</h3>
-                <p className="text-gray-600">Head of Operations</p>
+              <li className="bg-green-50 dark:bg-gray-700 p-4 rounded-xl shadow">
+                <h3 className="text-xl font-bold dark:text-white">Thilip</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Head of Operations
+                </p>
               </li>
-              <li className="bg-green-50 p-4 rounded-xl shadow">
-                <h3 className="text-xl font-bold">Narmadha</h3>
-                <p className="text-gray-600">Customer Relations</p>
+              <li className="bg-green-50 dark:bg-gray-700 p-4 rounded-xl shadow">
+                <h3 className="text-xl font-bold dark:text-white">Narmadha</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Customer Relations
+                </p>
               </li>
             </ul>
           </div>
 
           {/* Contact Us Form */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-green-700 mb-4">
+            <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-4">
               Contact Us
             </h2>
-            <form className="bg-white shadow-lg rounded-2xl p-6 space-y-4">
+            <form className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 space-y-4 transition-colors duration-300">
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
                   htmlFor="name"
                 >
                   Name
@@ -69,14 +79,14 @@ function About() {
                   type="text"
                   id="name"
                   name="name"
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="Your name"
                   required
                 />
               </div>
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
                   htmlFor="email"
                 >
                   Email
@@ -85,14 +95,14 @@ function About() {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="you@example.com"
                   required
                 />
               </div>
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
                   htmlFor="message"
                 >
                   Message
@@ -101,14 +111,14 @@ function About() {
                   id="message"
                   name="message"
                   rows="5"
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="Your message..."
                   required
                 ></textarea>
               </div>
               <button
                 type="submit"
-                className="bg-green-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-700 transition duration-300"
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-300"
               >
                 Send Message
               </button>
@@ -117,7 +127,7 @@ function About() {
 
           {/* Static Google Map */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-green-700 mb-4">
+            <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-4">
               Our Location
             </h2>
             <div className="rounded-xl overflow-hidden shadow-lg">
@@ -133,6 +143,7 @@ function About() {
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

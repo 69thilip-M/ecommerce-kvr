@@ -8,6 +8,7 @@ import { FaCartPlus, FaTrash, FaPlus, FaEdit } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
 
 function Products() {
   const [category, setCategory] = useState("all");
@@ -15,6 +16,10 @@ function Products() {
   const [allProducts, setAllProducts] = useState(productsData);
   const { addToCart, removeFromCart, isInCart } = useCart();
   const navigate = useNavigate();
+
+  // ✅ Current user
+  const auth = getAuth();
+  const currentUserEmail = auth.currentUser?.email;
 
   // ✅ Fetch Firebase products once
   useEffect(() => {
@@ -73,12 +78,14 @@ function Products() {
             Our Products
           </h1>
 
-          <button
-            onClick={() => navigate("/add-product")}
-            className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
-          >
-            <FaPlus /> Add Product
-          </button>
+          {currentUserEmail === "admin123@gmail.com" && (
+            <button
+              onClick={() => navigate("/add-product")}
+              className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
+            >
+              <FaPlus /> Add Product
+            </button>
+          )}
         </div>
 
         {/* Category Tabs + Search */}
@@ -119,10 +126,7 @@ function Products() {
                 className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl"
               >
                 {/* Image */}
-                <div
-                  className="cursor-pointer relative"
-                  onClick={() => navigate(`/product/${product.id}`)}
-                >
+                <div className="relative">
                   <img
                     src={product.image}
                     alt={product.name || product.productName}
@@ -155,38 +159,41 @@ function Products() {
                     </span>
                   </p>
 
-                  {/* ✅ Edit + Delete buttons above Add to Cart */}
-                  <div className="flex justify-between gap-3 mb-3">
-                    <button
-                      onClick={() => navigate(`/edit-product/${product.id}`)}
-                      className="flex-1 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition"
-                    >
-                      <FaEdit /> Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      className="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
-                    >
-                      <FaTrash /> Delete
-                    </button>
-                  </div>
-
-                  {/* ✅ Add to Cart button */}
-                  {isInCart(product.id) ? (
-                    <button
-                      onClick={() => removeFromCart(product.id)}
-                      className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
-                    >
-                      <FaTrash className="text-lg" /> Remove from Cart
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => addToCart(product)}
-                      className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
-                    >
-                      <FaCartPlus className="text-lg" /> Add to Cart
-                    </button>
+                  {/* ✅ Edit + Delete (only for admin) */}
+                  {currentUserEmail === "admin123@gmail.com" && (
+                    <div className="flex justify-between gap-3 mb-3">
+                      <button
+                        onClick={() => navigate(`/edit-product/${product.id}`)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                      >
+                        <FaEdit /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                      >
+                        <FaTrash /> Delete
+                      </button>
+                    </div>
                   )}
+
+                  {/* ✅ Add to Cart button (only for non-admin) */}
+                  {currentUserEmail !== "admin123@gmail.com" &&
+                    (isInCart(product.id) ? (
+                      <button
+                        onClick={() => removeFromCart(product.id)}
+                        className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                      >
+                        <FaTrash className="text-lg" /> Remove from Cart
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
+                      >
+                        <FaCartPlus className="text-lg" /> Add to Cart
+                      </button>
+                    ))}
                 </div>
               </div>
             ))}

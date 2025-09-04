@@ -4,9 +4,18 @@ import { useNavigate } from "react-router-dom";
 import productsData from "../pages/productsData";
 import Testimonials from "../components/Testimonials";
 import Newsletter from "../components/Newsletter";
-
+// import { addDoc, collection, getDoc, getDocs } from "firebase/firestore";
+// import { db } from "../firebase";
 function Home() {
   const navigate = useNavigate();
+  // const getNewProducts = async () => {
+  //   const q = query(collection(db, "addProducts"));
+  //   const querySnapShot = await getDocs(q);
+  //   let newProductsArray = [];
+  //   querySnapShot.forEach((doc)=>{
+  //     newProductsArray.push(...doc.data(),id: doc._id)
+  //   })
+  // };
 
   return (
     <div className="min-h-screen flex flex-col bg-green-50 dark:bg-gray-900 dark:text-gray-100">

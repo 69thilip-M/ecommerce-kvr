@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-
+import { getStorage } from "firebase/storage";
 // kural
 //   apiKey: "AIzaSyAysZw7k1iMEtuuD1AvI1BF4ay3RiMqj2E",
 //   authDomain: "ecommerce-store-f9059.firebaseapp.com",
@@ -34,3 +34,4 @@ export const app = initializeApp(firebaseConfig);
 
 // ✅ Firestore (for storing products)
 export const db = getFirestore(app);
+export const storage = getStorage(app);

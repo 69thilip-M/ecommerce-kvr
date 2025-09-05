@@ -8,6 +8,7 @@ import About from "./pages/About";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import EditProduct from "./pages/EditProduct";
+import ForgotPassword from "./pages/ForgetPassword";
 function App() {
   return (
     <BrowserRouter basename="/kmrvegetables">
@@ -23,6 +24,7 @@ function App() {
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-product/:id" element={<EditProduct />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>
   );

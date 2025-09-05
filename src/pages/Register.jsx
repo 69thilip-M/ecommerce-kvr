@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import { app } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc"; // ✅ Import Google Icon
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -85,10 +86,12 @@ function Register() {
           <div className="h-px w-1/4 bg-gray-300"></div>
         </div>
 
+        {/* ✅ Google Signup Button with Icon */}
         <button
-          className="w-full rounded-lg bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
+          className="w-full flex items-center justify-center gap-3 rounded-lg bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
           onClick={handleGoogleSignup}
         >
+          <FcGoogle className="text-xl bg-white rounded-full" />
           Continue with Google
         </button>
 

@@ -7,14 +7,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { app } from "../firebase";
 import { getAuth } from "firebase/auth";
+import { FcGoogle } from "react-icons/fc"; // ✅ Import Google icon
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // State for errors
+  const [error, setError] = useState("");
   const auth = getAuth(app);
   const navigate = useNavigate();
   const googleprovider = new GoogleAuthProvider();
+
   // login
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,9 +26,10 @@ function Login() {
       navigate("/home");
     } catch (error) {
       console.log(error.message);
-      setError(error.message); // Show error in popup
+      setError(error.message);
     }
   };
+
   // google login handle
   const handleGooglelogin = async (e) => {
     e.preventDefault();
@@ -36,7 +39,7 @@ function Login() {
       navigate("/home");
     } catch (error) {
       console.log(error.message);
-      setError(error.message); // Show error in popup
+      setError(error.message);
     }
   };
 
@@ -70,12 +73,17 @@ function Login() {
             Login
           </button>
         </form>
+
+        {/* Google login button with icon */}
         <button
-          className="w-full rounded-lg mt-5 bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
+          className="w-full flex items-center justify-center gap-3 rounded-lg mt-5 bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
           onClick={handleGooglelogin}
         >
+          <FcGoogle className="text-xl bg-white rounded-full" />{" "}
+          {/* ✅ Google Icon */}
           Continue with Google
         </button>
+
         <p className="text-center mt-4 text-gray-600">
           Don’t have an account?{" "}
           <Link to="/register" className="text-green-600 font-semibold">

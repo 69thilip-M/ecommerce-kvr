@@ -68,13 +68,39 @@ export const CartProvider = ({ children }) => {
   }, [cart, user, isCartLoaded]);
 
   // 🔹 Add item to cart
+  // const addToCart = (product) => {
+  //   setCart((prevCart) => {
+  //     if (!prevCart.find((item) => item.id === product.id)) {
+  //       return [...prevCart, product];
+  //     }
+  //     return prevCart;
+  //   });
+  // };
+
   const addToCart = (product) => {
     setCart((prevCart) => {
-      if (!prevCart.find((item) => item.id === product.id)) {
-        return [...prevCart, product];
+      const existingItem = prevCart.find((item) => item.id === product.id);
+      if (existingItem) {
+        // If already in cart, increase quantity
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
       }
-      return prevCart;
+      return [...prevCart, { ...product, quantity: 1 }];
     });
+  };
+
+  // inside CartProvider
+
+  // 🔹 Update item quantity
+  const updateQuantity = (id, quantity) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
+      )
+    );
   };
 
   // 🔹 Remove item from cart
@@ -87,7 +113,15 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, isInCart, user, isAuthReady }}
+      value={{
+        cart,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+        isInCart,
+        user,
+        isAuthReady,
+      }}
     >
       {children}
     </CartContext.Provider>

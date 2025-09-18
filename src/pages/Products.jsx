@@ -8,39 +8,30 @@ import { FaCartPlus, FaTrash, FaPlus, FaEdit } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
-import { getAuth } from "firebase/auth";
 
 function Products() {
   const [category, setCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [allProducts, setAllProducts] = useState(productsData);
-  const { addToCart, removeFromCart, isInCart } = useCart();
+  const { addToCart, removeFromCart, isInCart, user, isAuthReady } = useCart();
   const navigate = useNavigate();
 
-  // ✅ Current user
-  const auth = getAuth();
-  const currentUserEmail = auth.currentUser?.email;
-
-  // ✅ Fetch Firebase products once
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "addProducts"));
         const firebaseProducts = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data(),
+          ...doc.data(), 
         }));
-
         setAllProducts([...productsData, ...firebaseProducts]);
       } catch (error) {
         console.error("Error fetching Firebase products:", error);
       }
     };
-
     fetchProducts();
   }, []);
 
-  // ✅ Delete product from Firebase
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "addProducts", id));
@@ -51,46 +42,44 @@ function Products() {
     }
   };
 
-  // ✅ Apply filters
   const filteredProducts = allProducts.filter((product) => {
     const productCategory = (product.category || "").toLowerCase();
     const selectedCategory = category.toLowerCase();
-
     const matchesCategory =
       selectedCategory === "all" || productCategory === selectedCategory;
-
     const productName =
       product.name?.toLowerCase() || product.productName?.toLowerCase() || "";
-
     const matchesSearch = productName.includes(searchTerm.toLowerCase());
-
     return matchesCategory && matchesSearch;
   });
 
-  return (
-    <div className="min-h-screen bg-green-100 dark:bg-gray-900 flex flex-col transition-colors duration-300">
-      <Navbar />
+  if (!isAuthReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
+  return (
+    <div className="min-h-screen bg-green-100 dark:bg-gray-900 flex flex-col">
+      <Navbar />
       <div className="p-6 flex-grow">
-        {/* Header + Add Product */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-green-700 dark:text-green-400 text-center md:text-left">
             Our Products
           </h1>
-
-          {currentUserEmail === "admin123@gmail.com" && (
+          {user?.email === "admin123@gmail.com" && (
             <button
               onClick={() => navigate("/add-product")}
-              className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
+              className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
             >
               <FaPlus /> Add Product
             </button>
           )}
         </div>
 
-        {/* Category Tabs + Search */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-          {/* Category Tabs */}
           <div className="flex flex-wrap gap-3">
             {["all", "Fruits", "Vegetables", "dairy"].map((cat) => (
               <button
@@ -107,7 +96,6 @@ function Products() {
             ))}
           </div>
 
-          {/* Search Bar */}
           <input
             type="text"
             placeholder="Search products..."
@@ -117,7 +105,6 @@ function Products() {
           />
         </div>
 
-        {/* Product Grid */}
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
@@ -125,7 +112,6 @@ function Products() {
                 key={product.id}
                 className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl"
               >
-                {/* Image */}
                 <div className="relative">
                   <img
                     src={product.image}
@@ -139,13 +125,11 @@ function Products() {
                   )}
                 </div>
 
-                {/* Details */}
                 <div className="p-5 flex flex-col justify-between h-auto">
                   <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">
                     {product.name || product.productName}
                   </h2>
 
-                  {/* ✅ Description */}
                   {product.description && (
                     <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">
                       {product.description}
@@ -159,9 +143,8 @@ function Products() {
                     </span>
                   </p>
 
-                  {/* ✅ Edit + Delete (only for admin) */}
-                  {currentUserEmail === "admin123@gmail.com" && (
-                    <div className="flex justify-between gap-3 mb-3">
+                  {user?.email === "admin123@gmail.com" ? (
+                    <div className="flex gap-3 mb-3">
                       <button
                         onClick={() => navigate(`/edit-product/${product.id}`)}
                         className="flex-1 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition"
@@ -175,25 +158,21 @@ function Products() {
                         <FaTrash /> Delete
                       </button>
                     </div>
+                  ) : isInCart(product.id) ? (
+                    <button
+                      onClick={() => removeFromCart(product.id)}
+                      className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                    >
+                      <FaTrash /> Remove from Cart
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
+                    >
+                      <FaCartPlus /> Add to Cart
+                    </button>
                   )}
-
-                  {/* ✅ Add to Cart button (only for non-admin) */}
-                  {currentUserEmail !== "admin123@gmail.com" &&
-                    (isInCart(product.id) ? (
-                      <button
-                        onClick={() => removeFromCart(product.id)}
-                        className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
-                      >
-                        <FaTrash className="text-lg" /> Remove from Cart
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => addToCart(product)}
-                        className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
-                      >
-                        <FaCartPlus className="text-lg" /> Add to Cart
-                      </button>
-                    ))}
                 </div>
               </div>
             ))}

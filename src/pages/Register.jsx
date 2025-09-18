@@ -7,7 +7,8 @@ import {
 import { useState } from "react";
 import { app } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc"; // ✅ Import Google Icon
+import { FcGoogle } from "react-icons/fc";
+import { GiFruitBowl } from "react-icons/gi"; // 🍎 Fruit Bowl Icon
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -25,10 +26,10 @@ function Register() {
       await createUserWithEmailAndPassword(auth, email, password);
       setPopup({
         show: true,
-        message: "✅ Signup successful!",
+        message: "✅ Signup successful! Welcome to Fresh Market!",
         type: "success",
       });
-      setTimeout(() => navigate("/"), 2000); // redirect after 2s
+      setTimeout(() => navigate("/"), 2000);
     } catch (err) {
       setPopup({ show: true, message: "❌ " + err.message, type: "error" });
     }
@@ -50,18 +51,31 @@ function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 relative">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-700">
-          Register 👋
-        </h2>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-green-400 via-lime-500 to-green-700 relative">
+      {/* 🍏 Decorative Fruits */}
+      <div className="absolute top-10 left-12 text-white opacity-30 text-6xl">
+        🍇
+      </div>
+      <div className="absolute bottom-12 right-12 text-white opacity-30 text-7xl">
+        🥬
+      </div>
+
+      {/* Card */}
+      <div className="w-full max-w-md rounded-3xl bg-white/20 backdrop-blur-lg p-8 shadow-xl border border-white/30">
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <GiFruitBowl className="text-4xl text-yellow-300" />
+          <h2 className="text-3xl font-extrabold text-center text-white drop-shadow-lg">
+            Create Your Account
+          </h2>
+        </div>
+
         <form onSubmit={handleSignup} className="space-y-4">
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-lg border border-white/30 bg-white/20 p-3 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-lime-300"
             required
           />
           <input
@@ -69,35 +83,38 @@ function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
-            className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-lg border border-white/30 bg-white/20 p-3 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-lime-300"
             required
           />
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-600 p-3 font-semibold text-white transition duration-300 hover:bg-blue-700"
+            className="w-full rounded-lg bg-gradient-to-r from-lime-500 to-green-600 p-3 font-semibold text-white shadow-md hover:scale-105 transition-transform duration-300"
           >
             Sign up
           </button>
         </form>
 
         <div className="my-6 flex items-center justify-center">
-          <div className="h-px w-1/4 bg-gray-300"></div>
-          <span className="mx-2 text-gray-500">OR</span>
-          <div className="h-px w-1/4 bg-gray-300"></div>
+          <div className="h-px w-1/4 bg-white/40"></div>
+          <span className="mx-2 text-white">OR</span>
+          <div className="h-px w-1/4 bg-white/40"></div>
         </div>
 
-        {/* ✅ Google Signup Button with Icon */}
+        {/* ✅ Google Signup */}
         <button
-          className="w-full flex items-center justify-center gap-3 rounded-lg bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
+          className="w-full flex items-center justify-center gap-3 rounded-lg bg-white text-gray-700 p-3 font-semibold shadow-md hover:scale-105 transition-transform duration-300"
           onClick={handleGoogleSignup}
         >
-          <FcGoogle className="text-xl bg-white rounded-full" />
+          <FcGoogle className="text-2xl" />
           Continue with Google
         </button>
 
-        <p className="text-center mt-4 text-gray-600">
+        <p className="text-center mt-6 text-white">
           Already have an account?
-          <Link to="/" className="ml-1 text-green-600 font-semibold">
+          <Link
+            to="/"
+            className="ml-1 text-yellow-300 font-semibold hover:underline"
+          >
             Login
           </Link>
         </p>
@@ -105,7 +122,7 @@ function Register() {
 
       {/* ✅ Popup */}
       {popup.show && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
           <div
             className={`p-6 rounded-xl shadow-xl text-center ${
               popup.type === "success" ? "bg-green-100" : "bg-red-100"

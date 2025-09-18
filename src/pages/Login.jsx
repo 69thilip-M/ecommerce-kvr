@@ -7,7 +7,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { app } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { FcGoogle } from "react-icons/fc"; // ✅ Import Google icon
+import { FcGoogle } from "react-icons/fc";
+import { GiFruitBowl } from "react-icons/gi"; // 🍎 Fruit bowl icon
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -44,54 +45,66 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-green-50 relative">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-96">
-        <h2 className="text-2xl font-bold text-center text-green-700 mb-6">
-          Login
-        </h2>
-        <form onSubmit={handleLogin}>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 via-lime-500 to-green-700 relative">
+      {/* Decorative fruit illustration */}
+      <div className="absolute top-10 left-10 text-white opacity-30 text-6xl">
+        🍎
+      </div>
+      <div className="absolute bottom-12 right-10 text-white opacity-30 text-7xl">
+        🥦
+      </div>
+
+      {/* Login Card */}
+      <div className="bg-white/20 backdrop-blur-lg p-8 rounded-3xl shadow-2xl w-96 border border-white/30">
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <GiFruitBowl className="text-4xl text-yellow-300" />
+          <h2 className="text-3xl font-extrabold text-center text-white drop-shadow-lg">
+            Fresh Market Login
+          </h2>
+        </div>
+
+        <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
-            placeholder="Email"
-            className="w-full border p-2 mb-4 rounded"
+            placeholder="Enter your email"
+            className="w-full border border-white/30 bg-white/20 text-white placeholder-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Password"
-            className="w-full border p-2 mb-4 rounded"
+            placeholder="Enter your password"
+            className="w-full border border-white/30 bg-white/20 text-white placeholder-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+            className="w-full bg-gradient-to-r from-lime-500 to-green-600 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
           >
             Login
           </button>
         </form>
 
-        {/* Google login button with icon */}
+        {/* Google login button */}
         <button
-          className="w-full flex items-center justify-center gap-3 rounded-lg mt-5 bg-red-500 p-3 font-semibold text-white transition duration-300 hover:bg-red-600"
+          className="w-full flex items-center justify-center gap-3 rounded-lg mt-5 bg-white text-gray-700 p-3 font-semibold shadow-md hover:scale-105 transition-transform duration-300"
           onClick={handleGooglelogin}
         >
-          <FcGoogle className="text-xl bg-white rounded-full" />{" "}
-          {/* ✅ Google Icon */}
+          <FcGoogle className="text-2xl" />
           Continue with Google
         </button>
 
-        <p className="text-center mt-4 text-gray-600">
+        <p className="text-center mt-6 text-white">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-green-600 font-semibold">
+          <Link to="/register" className="text-yellow-300 font-semibold hover:underline">
             Register
           </Link>
         </p>
-        <p className="text-center mt-4">
-          <Link to="/forgot-password" className="text-blue-600 hover:underline">
+        <p className="text-center mt-3">
+          <Link to="/forgot-password" className="text-lime-200 hover:underline">
             Forgot Password?
           </Link>
         </p>
@@ -99,7 +112,7 @@ function Login() {
 
       {/* Error Popup Modal */}
       {error && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
             <h3 className="text-red-600 font-bold text-lg mb-3">Error</h3>
             <p className="text-gray-700 mb-4">{error}</p>

@@ -11,6 +11,32 @@ function Cart() {
     0
   );
 
+  // ✅ Handle WhatsApp Order
+  const handleOrderNow = () => {
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    // Build order message
+    let message = "🛒 New Order Details:\n\n";
+    cart.forEach((item, index) => {
+      message += `${index + 1}. ${item.name} (x${item.quantity || 1}) - ₹${
+        item.price * (item.quantity || 1)
+      }\n`;
+    });
+    message += `\n💰 Total Amount: ₹${totalAmount}\n\nPlease confirm my order. ✅`;
+
+    // Encode message for URL
+    const encodedMessage = encodeURIComponent(message);
+
+    // WhatsApp link
+    const whatsappLink = `https://wa.me/918825875206?text=${encodedMessage}`;
+
+    // Open WhatsApp
+    window.open(whatsappLink, "_blank");
+  };
+
   return (
     <div className="min-h-screen bg-green-100 dark:bg-gray-900 flex flex-col text-gray-900 dark:text-gray-100">
       <Navbar />
@@ -27,6 +53,7 @@ function Cart() {
             </p>
           ) : (
             <div className="overflow-x-auto">
+              {/* cart table same as before */}
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
@@ -120,7 +147,10 @@ function Cart() {
                     ₹{totalAmount}
                   </span>
                 </p>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md font-medium">
+                <button
+                  onClick={handleOrderNow}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md font-medium"
+                >
                   Order Now →
                 </button>
               </div>

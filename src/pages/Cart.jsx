@@ -1,40 +1,95 @@
+// src/pages/Cart.jsx
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
+import { db } from "../firebase";
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
 function Cart() {
-  const { cart, removeFromCart, updateQuantity } = useCart();
+  const { cart, removeFromCart, updateQuantity, clearCart, user } = useCart();
 
-  // ✅ Calculate total amount
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [pendingOrder, setPendingOrder] = useState(null);
+
   const totalAmount = cart.reduce(
     (sum, item) => sum + item.price * (item.quantity || 1),
     0
   );
 
-  // ✅ Handle WhatsApp Order
+  const clearCartSafe = () => {
+    if (typeof clearCart === "function") {
+      clearCart();
+      return;
+    }
+    cart.forEach((i) => removeFromCart(i.id));
+  };
+
   const handleOrderNow = () => {
-    if (cart.length === 0) {
+    if (!cart || cart.length === 0) {
       alert("Your cart is empty!");
       return;
     }
+    setShowConfirm(true);
+  };
 
-    // Build order message
+  const confirmOrder = () => {
+    const snapshot = {
+      id: Date.now().toString(),
+      items: cart.map((it) => ({ ...it })),
+      total: totalAmount,
+      placedAt: new Date().toISOString(),
+    };
+
+    // WhatsApp message
     let message = "🛒 New Order Details:\n\n";
-    cart.forEach((item, index) => {
+    snapshot.items.forEach((item, index) => {
       message += `${index + 1}. ${item.name} (x${item.quantity || 1}) - ₹${
         item.price * (item.quantity || 1)
       }\n`;
     });
-    message += `\n💰 Total Amount: ₹${totalAmount}\n\nPlease confirm my order. ✅`;
+    message += `\n💰 Total Amount: ₹${snapshot.total}\n\nPlease confirm my order. ✅`;
 
-    // Encode message for URL
     const encodedMessage = encodeURIComponent(message);
-
-    // WhatsApp link
     const whatsappLink = `https://wa.me/918825875206?text=${encodedMessage}`;
-
-    // Open WhatsApp
     window.open(whatsappLink, "_blank");
+
+    setPendingOrder(snapshot);
+    setShowConfirm(false);
+    setShowSuccess(true);
+  };
+
+  const handleSuccessOk = async () => {
+    if (!pendingOrder || !user) {
+      setShowSuccess(false);
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      const ordersRef = doc(db, "orders", user.uid);
+      const docSnap = await getDoc(ordersRef);
+
+      if (docSnap.exists()) {
+        await updateDoc(ordersRef, {
+          data: arrayUnion(pendingOrder),
+        });
+      } else {
+        await setDoc(ordersRef, { data: [pendingOrder] });
+      }
+
+      clearCartSafe();
+      setPendingOrder(null);
+      setShowSuccess(false);
+    } catch (err) {
+      console.error("Error saving order:", err);
+      alert("Failed to save order.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -53,7 +108,6 @@ function Cart() {
             </p>
           ) : (
             <div className="overflow-x-auto">
-              {/* cart table same as before */}
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
@@ -70,7 +124,6 @@ function Cart() {
                       key={item.id}
                       className="border-b border-gray-200 dark:border-gray-600"
                     >
-                      {/* Item Info */}
                       <td className="p-4 flex items-center gap-4">
                         <img
                           src={item.image}
@@ -87,7 +140,6 @@ function Cart() {
                         </div>
                       </td>
 
-                      {/* Quantity */}
                       <td className="p-4 text-center">
                         <div className="flex justify-center items-center gap-2">
                           <button
@@ -115,17 +167,14 @@ function Cart() {
                         </div>
                       </td>
 
-                      {/* Price */}
                       <td className="p-4 text-center text-green-600 dark:text-green-400 font-medium">
                         ₹{item.price}
                       </td>
 
-                      {/* Amount */}
                       <td className="p-4 text-center font-semibold">
                         ₹{item.price * (item.quantity || 1)}
                       </td>
 
-                      {/* Remove */}
                       <td className="p-4 text-center">
                         <button
                           onClick={() => removeFromCart(item.id)}
@@ -139,7 +188,6 @@ function Cart() {
                 </tbody>
               </table>
 
-              {/* ✅ Cart Footer */}
               <div className="flex justify-between items-center mt-6">
                 <p className="text-lg font-semibold">
                   Total:{" "}
@@ -160,6 +208,55 @@ function Cart() {
       </div>
 
       <Footer />
+
+      {/* Confirm Modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg max-w-sm w-full">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+              Confirm Order
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Do you want to place this order?
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmOrder}
+                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg"
+              >
+                Place Order
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg max-w-sm w-full text-center">
+            <h2 className="text-xl font-semibold mb-4 text-green-600">
+              ✅ Order Placed!
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Your order has been placed successfully. We’ll contact you soon.
+            </p>
+            <button
+              onClick={handleSuccessOk}
+              disabled={saving}
+              className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            >
+              {saving ? "Saving..." : "OK"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

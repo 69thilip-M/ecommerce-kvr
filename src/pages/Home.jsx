@@ -101,7 +101,7 @@ function Home() {
       </div>
 
       {/* Categories Section */}
-      <div className="bg-green-50 dark:bg-gray-900 py-16 px-6 text-center">
+      {/* <div className="bg-green-50 dark:bg-gray-900 py-16 px-6 text-center">
         <h2 className="text-3xl font-bold text-green-800 dark:text-green-300 mb-8">
           Shop by Category 🍇🥬
         </h2>
@@ -137,10 +137,10 @@ function Home() {
             </h3>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Best Selling Section */}
-      <div className="bg-white dark:bg-gray-800 py-16 px-6 text-center">
+      <div className="bg-white dark:bg-gray-900 py-16 px-6 text-center">
         <h2 className="text-3xl font-bold text-green-800 dark:text-green-300 mb-8">
           Best Sellers 🌟
         </h2>

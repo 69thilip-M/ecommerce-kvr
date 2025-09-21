@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import EditProduct from "./pages/EditProduct";
 import ForgotPassword from "./pages/ForgetPassword";
+import AddTestimonial from "./components/AddTestimonial";
 function App() {
   return (
     <BrowserRouter basename="/kmrvegetables">
@@ -25,6 +26,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-product/:id" element={<EditProduct />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/add-testimonial" element={<AddTestimonial />} />
       </Routes>
     </BrowserRouter>
   );

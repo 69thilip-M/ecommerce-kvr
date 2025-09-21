@@ -9,6 +9,7 @@ import { app } from "../firebase";
 import { getAuth } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { GiFruitBowl } from "react-icons/gi"; // 🍎 Fruit bowl icon
+import kmrlogo from "../assets/images/kmrlogo.png"; // ✅ fixed import
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ function Login() {
   const navigate = useNavigate();
   const googleprovider = new GoogleAuthProvider();
 
-  // login
+  // Email/Password login
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -31,7 +32,7 @@ function Login() {
     }
   };
 
-  // google login handle
+  // Google login
   const handleGooglelogin = async (e) => {
     e.preventDefault();
     try {
@@ -45,17 +46,15 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 via-lime-500 to-green-700 relative">
-      {/* Decorative fruit illustration */}
-      <div className="absolute top-10 left-10 text-white opacity-30 text-6xl">
-        🍎
-      </div>
-      <div className="absolute bottom-12 right-10 text-white opacity-30 text-7xl">
-        🥦
-      </div>
+    <div
+      className="flex items-center justify-center min-h-screen bg-contain bg-no-repeat bg-center relative"
+      style={{ backgroundImage: `url(${kmrlogo})` }} // ✅ full logo visible
+    >
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-black/50"></div>
 
       {/* Login Card */}
-      <div className="bg-white/20 backdrop-blur-lg p-8 rounded-3xl shadow-2xl w-96 border border-white/30">
+      <div className="relative bg-white/20 backdrop-blur-lg p-8 rounded-3xl shadow-2xl w-96 border border-white/30 z-10">
         <div className="flex items-center justify-center gap-2 mb-6">
           <GiFruitBowl className="text-4xl text-yellow-300" />
           <h2 className="text-3xl font-extrabold text-center text-white drop-shadow-lg">
@@ -63,6 +62,7 @@ function Login() {
           </h2>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
@@ -97,9 +97,13 @@ function Login() {
           Continue with Google
         </button>
 
+        {/* Links */}
         <p className="text-center mt-6 text-white">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-yellow-300 font-semibold hover:underline">
+          <Link
+            to="/register"
+            className="text-yellow-300 font-semibold hover:underline"
+          >
             Register
           </Link>
         </p>

@@ -1,7 +1,10 @@
+// src/components/Navbar.jsx
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useCart } from "../context/CartContext";
+import logo from "../assets/images/kmrlogo.png"; // ✅ Import the logo
 
 function Navbar() {
   const navigate = useNavigate();
@@ -9,18 +12,18 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const auth = getAuth();
-  // 🔑 Get user from localStorage (or however you store it after login)
+  const { cart } = useCart(); // ✅ Get cart from context
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
     return () => unsubscribe();
   }, [auth]);
-  //console.log(user);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    localStorage.removeItem("user"); // clear user info too
+    localStorage.removeItem("user");
     navigate("/");
   };
 
@@ -29,14 +32,15 @@ function Navbar() {
       ? "text-yellow-300 font-semibold"
       : "hover:text-yellow-300 transition";
 
+  // Total items in cart
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
     <nav className="bg-green-600 dark:bg-gray-900 text-white px-6 py-4 shadow-md flex items-center justify-between w-full relative">
-      {/* Logo */}
-      <NavLink
-        to="/home"
-        className="text-2xl font-bold flex items-center gap-2"
-      >
-        Veggie Store
+      {/* Logo with Image */}
+      <NavLink to="/home" className="flex items-center gap-2">
+        <img src={logo} alt="KMR Logo" className="h-10 w-10 object-cover" />
+        <span className="text-2xl font-bold">KMR</span>
       </NavLink>
 
       {/* Desktop Menu */}
@@ -51,10 +55,14 @@ function Navbar() {
           About
         </NavLink>
 
-        {/* ✅ Show Cart only if NOT admin */}
         {user?.email !== "admin123@gmail.com" && (
           <NavLink to="/cart" className={navLinkClass}>
             Cart
+            {totalItems > 0 && (
+              <span className="ml-1 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">
+                {totalItems}
+              </span>
+            )}
           </NavLink>
         )}
 
@@ -68,7 +76,6 @@ function Navbar() {
           Logout
         </button>
 
-        {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
           className="ml-4 px-3 py-1 rounded bg-white text-black dark:bg-gray-700 dark:text-white"
@@ -107,7 +114,6 @@ function Navbar() {
             About
           </NavLink>
 
-          {/* ✅ Hide Cart if admin */}
           {user?.email !== "admin123@gmail.com" && (
             <NavLink
               to="/cart"
@@ -115,6 +121,11 @@ function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               Cart
+              {totalItems > 0 && (
+                <span className="ml-1 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">
+                  {totalItems}
+                </span>
+              )}
             </NavLink>
           )}
 
@@ -135,7 +146,6 @@ function Navbar() {
             Logout
           </button>
 
-          {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
             className="px-3 py-1 rounded bg-white text-black dark:bg-gray-700 dark:text-white"

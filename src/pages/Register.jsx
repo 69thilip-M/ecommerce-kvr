@@ -9,6 +9,7 @@ import { app } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { GiFruitBowl } from "react-icons/gi"; // 🍎 Fruit Bowl Icon
+import kmrlogo from "../assets/images/kmrlogo.png"; // ✅ Import your logo
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -51,17 +52,15 @@ function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-green-400 via-lime-500 to-green-700 relative">
-      {/* 🍏 Decorative Fruits */}
-      <div className="absolute top-10 left-12 text-white opacity-30 text-6xl">
-        🍇
-      </div>
-      <div className="absolute bottom-12 right-12 text-white opacity-30 text-7xl">
-        🥬
-      </div>
+    <div
+      className="flex min-h-screen items-center justify-center bg-contain bg-no-repeat bg-center relative"
+      style={{ backgroundImage: `url(${kmrlogo})` }} // ✅ full logo visible
+    >
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/50"></div>
 
       {/* Card */}
-      <div className="w-full max-w-md rounded-3xl bg-white/20 backdrop-blur-lg p-8 shadow-xl border border-white/30">
+      <div className="relative w-full max-w-md rounded-3xl bg-white/20 backdrop-blur-lg p-8 shadow-xl border border-white/30 z-10">
         <div className="flex items-center justify-center gap-2 mb-6">
           <GiFruitBowl className="text-4xl text-yellow-300" />
           <h2 className="text-3xl font-extrabold text-center text-white drop-shadow-lg">

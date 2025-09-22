@@ -4,7 +4,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useCart } from "../context/CartContext";
-import logo from "../assets/images/kmrlogo.png"; // ✅ Import the logo
+import logo from "../assets/images/kmrlogo.png"; // ✅ Import your logo
 
 function Navbar() {
   const navigate = useNavigate();
@@ -12,12 +12,10 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const auth = getAuth();
-  const { cart } = useCart(); // ✅ Get cart from context
+  const { cart } = useCart();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
+    const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, [auth]);
 
@@ -32,12 +30,12 @@ function Navbar() {
       ? "text-yellow-300 font-semibold"
       : "hover:text-yellow-300 transition";
 
-  // Total items in cart
-  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  // ✅ Cart count = number of unique items
+  const totalItems = cart.length;
 
   return (
     <nav className="bg-green-600 dark:bg-gray-900 text-white px-6 py-4 shadow-md flex items-center justify-between w-full relative">
-      {/* Logo with Image */}
+      {/* Logo */}
       <NavLink to="/home" className="flex items-center gap-2">
         <img src={logo} alt="KMR Logo" className="h-10 w-10 object-cover" />
         <span className="text-2xl font-bold">KMR</span>
@@ -92,27 +90,16 @@ function Navbar() {
       {/* Mobile Dropdown Menu */}
       {isOpen && (
         <div className="absolute top-full left-0 w-full bg-green-700 dark:bg-gray-800 flex flex-col gap-4 p-4 md:hidden">
-          <NavLink
-            to="/home"
-            className={navLinkClass}
-            onClick={() => setIsOpen(false)}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/products"
-            className={navLinkClass}
-            onClick={() => setIsOpen(false)}
-          >
-            Products
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={navLinkClass}
-            onClick={() => setIsOpen(false)}
-          >
-            About
-          </NavLink>
+          {["home", "products", "about"].map((link) => (
+            <NavLink
+              key={link}
+              to={`/${link}`}
+              className={navLinkClass}
+              onClick={() => setIsOpen(false)}
+            >
+              {link.charAt(0).toUpperCase() + link.slice(1)}
+            </NavLink>
+          ))}
 
           {user?.email !== "admin123@gmail.com" && (
             <NavLink
@@ -136,6 +123,7 @@ function Navbar() {
           >
             Profile
           </NavLink>
+
           <button
             onClick={() => {
               handleLogout();

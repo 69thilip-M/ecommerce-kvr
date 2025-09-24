@@ -1,8 +1,25 @@
+/* eslint-disable no-unused-vars */
+// src/pages/About.jsx
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Contact from "./Contact";
+import { motion } from "framer-motion";
 
 function About() {
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
+  // const fadeIn = {
+  //   hidden: { opacity: 0 },
+  //   visible: { opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
+  // };
+
   return (
     <div className="min-h-screen bg-green-100 dark:bg-gray-900 flex flex-col transition-colors duration-300">
       {/* Navbar */}
@@ -11,12 +28,24 @@ function About() {
       <div className="bg-green-100 dark:bg-gray-900 flex-grow transition-colors duration-300">
         <div className="p-6 max-w-5xl mx-auto">
           {/* Page Title */}
-          <h1 className="text-4xl font-bold text-center text-green-700 dark:text-green-400 mb-6">
+          <motion.h1
+            className="text-4xl font-bold text-center text-green-700 dark:text-green-400 mb-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+          >
             About Us
-          </h1>
+          </motion.h1>
 
           {/* Company Info */}
-          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 mb-8 transition-colors duration-300">
+          <motion.div
+            className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 mb-8 transition-colors duration-300"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+          >
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               Welcome to{" "}
               <span className="font-semibold text-green-700 dark:text-green-400">
@@ -34,40 +63,62 @@ function About() {
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
               Thank you for choosing FreshMart – where freshness meets trust. 🌱
             </p>
-          </div>
+          </motion.div>
 
           {/* Team Info */}
-          <div className="mb-8">
+          <motion.div
+            className="mb-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+          >
             <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-4">
               Our Team
             </h2>
             <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <li className="bg-green-50 dark:bg-gray-700 p-4 rounded-xl shadow">
-                <h3 className="text-xl font-bold dark:text-white">Kural</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Founder & CEO
-                </p>
-              </li>
-              <li className="bg-green-50 dark:bg-gray-700 p-4 rounded-xl shadow">
-                <h3 className="text-xl font-bold dark:text-white">Thilip</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Head of Operations
-                </p>
-              </li>
-              <li className="bg-green-50 dark:bg-gray-700 p-4 rounded-xl shadow">
-                <h3 className="text-xl font-bold dark:text-white">Narmadha</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Customer Relations
-                </p>
-              </li>
+              {[
+                { name: "Kural", role: "Founder & CEO" },
+                { name: "Thilip", role: "Head of Operations" },
+                { name: "Narmadha", role: "Customer Relations" },
+              ].map((member, i) => (
+                <motion.li
+                  key={i}
+                  className="bg-green-50 dark:bg-gray-700 p-4 rounded-xl shadow"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ delay: i * 0.2 }}
+                >
+                  <h3 className="text-xl font-bold dark:text-white">
+                    {member.name}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    {member.role}
+                  </p>
+                </motion.li>
+              ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Contact Us Form */}
-          <Contact></Contact>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+          >
+            <Contact />
+          </motion.div>
 
           {/* Static Google Map */}
-          <div className="mb-8">
+          <motion.div
+            className="mb-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+          >
             <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-4">
               Our Location
             </h2>
@@ -81,7 +132,7 @@ function About() {
                 loading="lazy"
               ></iframe>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 

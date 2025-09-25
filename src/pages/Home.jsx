@@ -7,7 +7,7 @@ import productsData from "../pages/productsData";
 import Testimonials from "../components/Testimonials";
 import Newsletter from "../components/Newsletter";
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Home() {
   const navigate = useNavigate();
@@ -45,55 +45,51 @@ function Home() {
     },
   };
 
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
+  // Slider images
+  const sliderImages = [
+    "https://images.pexels.com/photos/5966439/pexels-photo-5966439.jpeg",
+    "https://images.pexels.com/photos/1435903/pexels-photo-1435903.jpeg",
+    "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg",
+    "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  // Auto-slide every 3s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % sliderImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [sliderImages.length]);
 
   return (
     <div className="min-h-screen flex flex-col bg-green-50 dark:bg-gray-900 dark:text-gray-100">
       <Navbar />
 
-      {/* Hero Section */}
-      <motion.div
-        className="relative flex flex-col items-center justify-center text-center flex-grow bg-green-100 dark:bg-gray-800"
-        initial="hidden"
-        animate="visible"
-        variants={fadeIn}
-      >
-        <img
-          src="https://media.giphy.com/media/l3vQ6bJkY8dVZ2E1C/giphy.gif"
-          alt="Fresh veggies gif"
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-        />
-        <div className="relative z-10 max-w-3xl px-6 py-10">
-          <motion.h1
-            className="text-5xl md:text-6xl font-extrabold text-green-800 dark:text-green-300 drop-shadow-lg"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 1 } }}
-          >
+      {/* Hero Slider Section */}
+      <div className="relative w-full h-[500px] overflow-hidden">
+        {sliderImages.map((img, index) => (
+          <motion.img
+            key={index}
+            src={img}
+            alt={`slide-${index}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              index === current ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+
+        {/* Slider Content */}
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center bg-black/40 text-white px-6">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
             Fresh Fruits & Veggies 🍎🥦
-          </motion.h1>
-          <motion.p
-            className="mt-4 text-lg md:text-xl text-gray-700 dark:text-gray-300 font-medium"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { delay: 0.5, duration: 1 } }}
-          >
+          </h1>
+          <p className="text-lg md:text-xl mb-6 max-w-2xl">
             Get your favorite groceries delivered straight to your home with
             love & freshness.
-          </motion.p>
-          <motion.div
-            className="mt-6 flex justify-center gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              transition: { delay: 1, duration: 0.8 },
-            }}
-          >
+          </p>
+          <div className="flex gap-4">
             <button
               className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition"
               onClick={() => navigate("/products")}
@@ -101,14 +97,14 @@ function Home() {
               Shop Now 🛒
             </button>
             <button
-              className="px-6 py-3 bg-white dark:bg-gray-700 text-green-700 dark:text-green-300 border border-green-600 rounded-xl shadow hover:bg-green-50 dark:hover:bg-gray-600 transition"
+              className="px-6 py-3 bg-white text-green-700 border border-green-600 rounded-xl shadow hover:bg-green-50 transition"
               onClick={() => navigate("/about")}
             >
               Learn More
             </button>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Feature Section */}
       <motion.div

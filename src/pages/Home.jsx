@@ -8,6 +8,12 @@ import Testimonials from "../components/Testimonials";
 import Newsletter from "../components/Newsletter";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
+import budgetFriendly from "../assets/images/budget-friendly-removebg-preview.png";
+import fastDelivery from "../assets/images/fast-delivery-removebg-preview.png";
+import replacement from "../assets/images/replacement-removebg-preview.png";
+import bannerHome from "../assets/images/banner-home.jpg";
 
 function Home() {
   const navigate = useNavigate();
@@ -66,6 +72,21 @@ function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-green-50 dark:bg-gray-900 dark:text-gray-100">
       <Navbar />
+      {/* 🔥 Contact Info Bar */}
+      <div className="w-full bg-green-700 text-white flex flex-col md:flex-row items-center md:justify-end px-6 py-2 text-sm font-bold gap-2 md:gap-6">
+        {/* Phone */}
+        <div className="flex items-center gap-2">
+          <span>Customer Support :</span>
+          <PhoneIcon fontSize="small" />
+          <span>+91 98765 43210</span>
+        </div>
+
+        {/* Email */}
+        <div className="flex items-center gap-2">
+          <EmailIcon fontSize="small" />
+          <span>support@kmrstore.com</span>
+        </div>
+      </div>
 
       {/* Hero Slider Section */}
       <div className="relative w-full h-[500px] overflow-hidden">
@@ -83,7 +104,7 @@ function Home() {
         {/* Slider Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center bg-black/40 text-white px-6">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
-            Fresh Fruits & Veggies 🍎🥦
+            Fresh Fruits & Veggies
           </h1>
           <p className="text-lg md:text-xl mb-6 max-w-2xl">
             Get your favorite groceries delivered straight to your home with
@@ -106,9 +127,9 @@ function Home() {
         </div>
       </div>
 
-      {/* Feature Section */}
+      {/* feature section Content */}
       <motion.div
-        className="bg-white dark:bg-gray-800 py-16 px-6 grid grid-cols-1 md:grid-cols-3 gap-10 text-center"
+        className="bg-white dark:bg-gray-800 py-16 px-6 grid grid-cols-1 md:grid-cols-3 gap-8"
         ref={(el) => (sectionRefs.current[0] = el)}
         initial="hidden"
         animate={controls}
@@ -116,24 +137,24 @@ function Home() {
       >
         {[
           {
-            img: "https://cdn-icons-png.flaticon.com/512/415/415733.png",
-            title: "100% Fresh",
-            desc: "Only the best quality fruits & veggies, handpicked for you.",
+            img: fastDelivery,
+            title: "Express Delivery",
+            desc: "Select products and place your order. The products will reach you in a lightning speed.",
           },
           {
-            img: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
-            title: "Fast Delivery",
-            desc: "Get your groceries delivered within hours at your doorstep.",
+            img: replacement,
+            title: "Replacement Guarantee",
+            desc: "Call us or message us within 2 hours of delivery, if the product we delivered are not satisfactory. We will replace them as early as possible.",
           },
           {
-            img: "https://cdn-icons-png.flaticon.com/512/744/744922.png",
-            title: "Best Prices",
-            desc: "Freshness doesn’t have to be expensive — we keep it affordable.",
+            img: budgetFriendly,
+            title: "Budget Friendly",
+            desc: "Onionz offers you fresh and budget friendly vegetables and fruits. Order your favourite vegetables and fruits and grab them with the lowest price.",
           },
         ].map((feature, i) => (
           <motion.div
             key={i}
-            className="flex flex-col items-center"
+            className="flex items-center border border-purple-300 rounded-lg p-6 hover:shadow-lg transition"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
@@ -142,14 +163,16 @@ function Home() {
             <img
               src={feature.img}
               alt={feature.title}
-              className="w-20 h-20 mb-4"
+              className="w-28 h-28 mr-6 flex-shrink-0"
             />
-            <h3 className="text-xl font-semibold text-green-700 dark:text-green-300">
-              {feature.title}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              {feature.desc}
-            </p>
+            <div className="text-left">
+              <h3 className="text-lg font-bold text-purple-600 mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                {feature.desc}
+              </p>
+            </div>
           </motion.div>
         ))}
       </motion.div>
@@ -163,7 +186,7 @@ function Home() {
         variants={fadeInUp}
       >
         <h2 className="text-3xl font-bold text-green-800 dark:text-green-300 mb-8">
-          Best Sellers 🌟
+          Our Best Sellers
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {productsData.slice(0, 4).map((product) => (
@@ -199,6 +222,34 @@ function Home() {
           ))}
         </div>
       </motion.div>
+      {/* banner section */}
+      <motion.div
+        className="relative w-full h-[300px] md:h-[400px] my-16"
+        ref={(el) => (sectionRefs.current[4] = el)}
+        initial="hidden"
+        animate={controls}
+        variants={fadeInUp}
+      >
+        <img
+          src={bannerHome}
+          alt="Home Banner"
+          className="w-full h-full object-cover rounded-xl shadow-lg"
+        />
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center bg-black/30 text-white px-6">
+          {/* <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">
+            Freshness Delivered to Your Doorstep
+          </h2>
+          <p className="text-lg md:text-2xl mb-4 max-w-2xl">
+            Enjoy the finest fruits and vegetables every day with Onionz.
+          </p>
+          <button
+            className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition"
+            onClick={() => navigate("/products")}
+          >
+            Shop Now 🛒
+          </button> */}
+        </div>
+      </motion.div>
 
       {/* Newsletter Section */}
       <motion.div
@@ -209,7 +260,6 @@ function Home() {
       >
         <Newsletter />
       </motion.div>
-
       {/* Testimonials Section */}
       <motion.div
         ref={(el) => (sectionRefs.current[3] = el)}
@@ -219,7 +269,6 @@ function Home() {
       >
         <Testimonials />
       </motion.div>
-
       <Footer />
     </div>
   );

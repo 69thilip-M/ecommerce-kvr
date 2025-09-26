@@ -46,6 +46,7 @@ function About() {
             viewport={{ once: true, amount: 0.3 }}
             variants={fadeInUp}
           >
+            {/* About Description */}
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               Welcome to{" "}
               <span className="font-semibold text-green-700 dark:text-green-400">
@@ -60,9 +61,36 @@ function About() {
               accessible to everyone. With a wide range of fresh produce, we
               ensure that your family enjoys the goodness of nature every day.
             </p>
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
               Thank you for choosing FreshMart – where freshness meets trust. 🌱
             </p>
+
+            {/* Vision & Mission Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+              {/* Vision */}
+              <div className="bg-green-50 dark:bg-gray-700 p-6 rounded-xl shadow hover:shadow-lg transition">
+                <h3 className="text-xl font-bold text-green-700 dark:text-green-300 mb-2">
+                  Our Vision
+                </h3>
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                  To be the most trusted and convenient platform for fresh,
+                  healthy, and organic produce, bringing farm-to-table goodness
+                  to every home.
+                </p>
+              </div>
+
+              {/* Mission */}
+              <div className="bg-green-50 dark:bg-gray-700 p-6 rounded-xl shadow hover:shadow-lg transition">
+                <h3 className="text-xl font-bold text-green-700 dark:text-green-300 mb-2">
+                  Our Mission
+                </h3>
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                  To provide fresh, high-quality vegetables, fruits, and organic
+                  products directly from local farms, ensuring sustainability,
+                  health, and customer satisfaction.
+                </p>
+              </div>
+            </div>
           </motion.div>
 
           {/* Team Info */}
@@ -113,7 +141,7 @@ function About() {
 
           {/* Static Google Map */}
           <motion.div
-            className="mb-8"
+            className="mb-8 mt-8"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}

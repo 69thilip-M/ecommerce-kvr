@@ -15,6 +15,9 @@ function Products() {
   const [category, setCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [allProducts, setAllProducts] = useState(productsData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12; // Show 12 products per page
+
   const { addToCart, removeFromCart, isInCart, user, isAuthReady } = useCart();
   const navigate = useNavigate();
 
@@ -55,6 +58,23 @@ function Products() {
     return matchesCategory && matchesSearch;
   });
 
+  // Pagination logic
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top
+    }
+  };
+
   if (!isAuthReady) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -82,6 +102,7 @@ function Products() {
     <div className="min-h-screen bg-green-100 dark:bg-gray-900 flex flex-col">
       <Navbar />
       <div className="p-6 flex-grow">
+        {/* Header */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-green-700 dark:text-green-400 text-center md:text-left">
             Our Products
@@ -98,13 +119,17 @@ function Products() {
           )}
         </div>
 
+        {/* Filters */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div className="flex flex-wrap gap-3">
             {["all", "Fruits", "Vegetables", "dairy"].map((cat) => (
               <motion.button
                 key={cat}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setCategory(cat)}
+                onClick={() => {
+                  setCategory(cat);
+                  setCurrentPage(1); // reset to page 1 on category change
+                }}
                 className={`px-4 py-2 rounded-full font-medium transition ${
                   category.toLowerCase() === cat.toLowerCase()
                     ? "bg-green-600 text-white shadow-md"
@@ -120,102 +145,139 @@ function Products() {
             type="text"
             placeholder="Search products..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // reset to page 1 on search
+            }}
             className="w-full md:w-64 px-4 py-2 rounded-lg border border-green-400 dark:border-green-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
 
-        {filteredProducts.length > 0 ? (
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <AnimatePresence>
-              {filteredProducts.map((product) => (
-                <motion.div
-                  key={product.id}
-                  layout
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0, y: 50, scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden cursor-pointer"
-                >
-                  <div className="relative">
-                    <img
-                      src={product.image}
-                      alt={product.name || product.productName}
-                      className="w-full h-48 object-cover"
-                    />
-                    {product.category && (
-                      <span className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                        {product.category}
-                      </span>
-                    )}
-                  </div>
+        {/* Product Cards */}
+        {currentProducts.length > 0 ? (
+          <>
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <AnimatePresence>
+                {currentProducts.map((product) => (
+                  <motion.div
+                    key={product.id}
+                    layout
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit={{ opacity: 0, y: 50, scale: 0.95 }}
+                    whileHover={{ scale: 1.05 }}
+                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden cursor-pointer"
+                  >
+                    <div className="relative">
+                      <img
+                        src={product.image}
+                        alt={product.name || product.productName}
+                        className="w-full h-48 object-cover"
+                      />
+                      {product.category && (
+                        <span className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                          {product.category}
+                        </span>
+                      )}
+                    </div>
 
-                  <div className="p-5 flex flex-col justify-between h-auto">
-                    <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">
-                      {product.name || product.productName}
-                    </h2>
+                    <div className="p-5 flex flex-col justify-between h-auto">
+                      <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">
+                        {product.name || product.productName}
+                      </h2>
 
-                    {product.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">
-                        {product.description}
+                      {product.description && (
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">
+                          {product.description}
+                        </p>
+                      )}
+
+                      <p className="text-green-700 dark:text-green-400 font-semibold text-xl mb-3">
+                        ₹{product.price}{" "}
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          / 1kg
+                        </span>
                       </p>
-                    )}
 
-                    <p className="text-green-700 dark:text-green-400 font-semibold text-xl mb-3">
-                      ₹{product.price}{" "}
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        / 1kg
-                      </span>
-                    </p>
-
-                    {user?.email === "admin123@gmail.com" ? (
-                      <div className="flex gap-3 mb-3">
+                      {user?.email === "admin123@gmail.com" ? (
+                        <div className="flex gap-3 mb-3">
+                          <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() =>
+                              navigate(`/edit-product/${product.id}`)
+                            }
+                            className="flex-1 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                          >
+                            <FaEdit /> Edit
+                          </motion.button>
+                          <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleDelete(product.id)}
+                            className="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                          >
+                            <FaTrash /> Delete
+                          </motion.button>
+                        </div>
+                      ) : isInCart(product.id) ? (
                         <motion.button
                           whileTap={{ scale: 0.95 }}
-                          onClick={() =>
-                            navigate(`/edit-product/${product.id}`)
-                          }
-                          className="flex-1 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                          onClick={() => removeFromCart(product.id)}
+                          className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
                         >
-                          <FaEdit /> Edit
+                          <FaTrash /> Remove from Cart
                         </motion.button>
+                      ) : (
                         <motion.button
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => handleDelete(product.id)}
-                          className="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                          onClick={() => addToCart(product)}
+                          className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
                         >
-                          <FaTrash /> Delete
+                          <FaCartPlus /> Add to Cart
                         </motion.button>
-                      </div>
-                    ) : isInCart(product.id) ? (
-                      <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => removeFromCart(product.id)}
-                        className="w-full mt-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
-                      >
-                        <FaTrash /> Remove from Cart
-                      </motion.button>
-                    ) : (
-                      <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => addToCart(product)}
-                        className="w-full mt-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
-                      >
-                        <FaCartPlus /> Add to Cart
-                      </motion.button>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center gap-4 mt-8">
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-lg ${
+                  currentPage === 1
+                    ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700 text-white"
+                }`}
+              >
+                Previous
+              </button>
+
+              <span className="text-lg font-medium text-gray-700 dark:text-gray-300">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-lg ${
+                  currentPage === totalPages
+                    ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700 text-white"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          </>
         ) : (
           <p className="text-center text-gray-600 dark:text-gray-400 mt-10">
             No products found for "{searchTerm}"

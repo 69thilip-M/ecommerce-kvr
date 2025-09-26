@@ -17,7 +17,7 @@ const productsData = [
     stock: 50,
     description: "Organic carrots 🥕",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/CarrotDaucusCarota.jpg",
+     "https://upload.wikimedia.org/wikipedia/commons/9/90/Hapus_Mango.jpg",
   },
   {
     id: 3,
@@ -188,6 +188,103 @@ const productsData = [
   },
   {
     id: 20,
+    name: "Brinjal",
+    category: "Vegetables",
+    price: 55,
+    stock: 33,
+    description: "Fresh purple brinjals 🍆",
+    image: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Eggplant.jpg",
+  },
+  {
+    id: 21,
+    name: "Strawberry",
+    category: "Fruits",
+    price: 200,
+    stock: 20,
+    description: "Sweet red strawberries 🍓",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/2/29/PerfectStrawberry.jpg",
+  },
+  {
+    id: 22,
+    name: "Onion",
+    category: "Vegetables",
+    price: 45,
+    stock: 70,
+    description: "Fresh red onions 🧅",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/2/25/Onion_on_White.JPG",
+  },
+  {
+    id: 23,
+    name: "Papaya",
+    category: "Fruits",
+    price: 85,
+    stock: 28,
+    description: "Nutritious papayas 🥭",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/6/6b/Papaya_cross_section_BNC.jpg",
+  },
+  {
+    id: 24,
+    name: "Cabbage",
+    category: "Vegetables",
+    price: 50,
+    stock: 55,
+    description: "Green healthy cabbage 🥬",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/2/2e/Cabbage_cross_section.jpg",
+  },
+  {
+    id: 25,
+    name: "Grapes",
+    category: "Fruits",
+    price: 130,
+    stock: 45,
+    description: "Fresh juicy grapes 🍇",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/3/36/Kyoho-grape.jpg",
+  },
+  {
+    id: 26,
+    name: "Cauliflower",
+    category: "Vegetables",
+    price: 70,
+    stock: 38,
+    description: "Fresh organic cauliflower 🌸",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/6/69/Cauliflower.JPG",
+  },
+  {
+    id: 27,
+    name: "Guava",
+    category: "Fruits",
+    price: 60,
+    stock: 48,
+    description: "Delicious guavas 🍐",
+    image: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Guava_ID.jpg",
+  },
+  {
+    id: 28,
+    name: "Cucumber",
+    category: "Vegetables",
+    price: 40,
+    stock: 77,
+    description: "Fresh cucumbers 🥒",
+    image: "https://upload.wikimedia.org/wikipedia/commons/c/c7/Cucumbers.jpg",
+  },
+  {
+    id: 29,
+    name: "Watermelon",
+    category: "Fruits",
+    price: 180,
+    stock: 22,
+    description: "Refreshing watermelons 🍉",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/f/fd/Watermelon_cross_BNC.jpg",
+  },
+  {
+    id: 30,
     name: "Brinjal",
     category: "Vegetables",
     price: 55,

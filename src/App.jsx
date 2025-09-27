@@ -10,6 +10,9 @@ import Profile from "./pages/Profile";
 import EditProduct from "./pages/EditProduct";
 import ForgotPassword from "./pages/ForgetPassword";
 import AddTestimonial from "./components/AddTestimonial";
+import Blog from "./pages/Blog";
+import BlogDetail from "./pages/BlogDetails";
+
 function App() {
   return (
     <BrowserRouter basename="/kmrvegetables">
@@ -27,6 +30,8 @@ function App() {
         <Route path="/edit-product/:id" element={<EditProduct />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/add-testimonial" element={<AddTestimonial />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
       </Routes>
     </BrowserRouter>
   );

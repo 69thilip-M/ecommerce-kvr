@@ -6,7 +6,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useCart } from "../context/CartContext";
 import logo from "../assets/images/kmrlogo.png"; // ✅ Import your logo
 import CloseIcon from "@mui/icons-material/Close"; // ✅ Material UI Close Icon
-
+import Blog from "../pages/Blog";
 function Navbar() {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
@@ -108,6 +108,10 @@ function Navbar() {
 
           <NavLink to="/profile" className={navLinkClass}>
             Profile
+          </NavLink>
+
+          <NavLink to="/blog" className={navLinkClass}>
+            Blog
           </NavLink>
           <button
             onClick={handleLogout}

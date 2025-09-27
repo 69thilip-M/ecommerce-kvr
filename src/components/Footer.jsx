@@ -1,5 +1,6 @@
 import { FaGooglePlay, FaApple } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext"; // ✅ import theme hook
+import logo from "../assets/images/kmrlogo.png"; // ✅ import your logo
 
 function Footer() {
   const { theme } = useTheme(); // ✅ get current theme (light/dark)
@@ -13,8 +14,10 @@ function Footer() {
       }`}
     >
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-6">
-        {/* Column 1 - About */}
+        {/* Column 1 - About with Logo */}
         <div>
+          {/* ✅ Logo */}
+          <img src={logo} alt="FreshMart Logo" className="h-12 w-auto mb-4" />
           <h2 className="text-xl font-semibold mb-4">FreshMart</h2>
           <p className="text-sm leading-6">
             FreshMart is your one-stop destination for fresh groceries, fruits,

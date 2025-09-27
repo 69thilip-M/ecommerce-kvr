@@ -12,7 +12,7 @@ function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [showBanner, setShowBanner] = useState(true); // ✅ Banner visibility
+  const [showBanner] = useState(true); // ✅ Banner visibility
   const auth = getAuth();
   const { cart } = useCart();
 
@@ -38,21 +38,40 @@ function Navbar() {
   return (
     <>
       {/* 🔥 Top Offer Banner with Close Button */}
-      {showBanner && (
-        <div className="w-full bg-yellow-400 text-black font-bold flex items-center justify-center px-4 py-2 relative">
-          {/* Centered Message */}
-          <span className="text-sm md:text-base text-center">
-            🎉 First Order Offer! Get{" "}
-            <span className="text-red-600">20% OFF</span> on all products 🎉
-          </span>
 
-          {/* Close Button at Right */}
-          <button
-            onClick={() => setShowBanner(false)}
-            className="absolute right-4 text-black hover:text-red-600"
-          >
-            <CloseIcon />
-          </button>
+      {showBanner && (
+        <div className="w-full bg-yellow-400 text-black font-bold overflow-hidden relative">
+          <div className="marquee flex whitespace-nowrap">
+            <span className="mx-8">
+              🎉 First Order Offer! Get{" "}
+              <span className="text-red-600">20% OFF</span> on all products 🎉
+            </span>
+            <span className="mx-8">
+              🌞 Every <span className="text-red-600">Sunday</span> is a Holiday
+              – Shop Anytime Online!
+            </span>
+            {/* <span className="mx-8">
+              🎊 <span className="text-red-600">Festival Season</span> Special
+              Discounts – Don’t Miss Out!
+            </span>
+            <span className="mx-8">
+              🚚 <span className="text-red-600">Free Delivery</span> on Holidays
+              & Weekends!
+            </span>
+            <span className="mx-8">
+              🎁 Celebrate{" "}
+              <span className="text-red-600">Christmas & New Year</span> with
+              Big Savings!
+            </span>
+            <span className="mx-8">
+              🌸 <span className="text-red-600">Holiday Offers</span> – Limited
+              Time Only!
+            </span> */}
+            {/* <span className="mx-8">
+              🛍️ <span className="text-red-600">Special Sale</span> Every
+              Holiday – Shop & Save!
+            </span> */}
+          </div>
         </div>
       )}
 

@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes marquee {
+  0% {
+    transform: translateX(200%); /* Start at the right edge */
+  }
+  100% {
+    transform: translateX(-100%); /* Move fully to the left */
+  }
+}
+
+.marquee {
+  display: inline-flex;
+  animation: marquee 12s linear infinite;
+}

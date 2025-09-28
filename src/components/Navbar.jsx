@@ -1,20 +1,21 @@
 // src/components/Navbar.jsx
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useCart } from "../context/CartContext";
-import logo from "../assets/images/kmrlogo.png"; // ✅ Import your logo
-import CloseIcon from "@mui/icons-material/Close"; // ✅ Material UI Close Icon
-import Blog from "../pages/Blog";
+import logo from "../assets/images/kmrlogo.png";
+
 function Navbar() {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [showBanner] = useState(true); // ✅ Banner visibility
+  const [showBanner] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const auth = getAuth();
   const { cart } = useCart();
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
@@ -35,10 +36,20 @@ function Navbar() {
   // ✅ Cart count = number of unique items
   const totalItems = cart.length;
 
+  // ✅ Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <>
-      {/* 🔥 Top Offer Banner with Close Button */}
-
+      {/* 🔥 Top Offer Banner */}
       {showBanner && (
         <div className="w-full bg-yellow-400 text-black font-bold overflow-hidden relative">
           <div className="marquee flex whitespace-nowrap">
@@ -50,27 +61,6 @@ function Navbar() {
               🌞 Every <span className="text-red-600">Sunday</span> is a Holiday
               – Shop Anytime Online!
             </span>
-            {/* <span className="mx-8">
-              🎊 <span className="text-red-600">Festival Season</span> Special
-              Discounts – Don’t Miss Out!
-            </span>
-            <span className="mx-8">
-              🚚 <span className="text-red-600">Free Delivery</span> on Holidays
-              & Weekends!
-            </span>
-            <span className="mx-8">
-              🎁 Celebrate{" "}
-              <span className="text-red-600">Christmas & New Year</span> with
-              Big Savings!
-            </span>
-            <span className="mx-8">
-              🌸 <span className="text-red-600">Holiday Offers</span> – Limited
-              Time Only!
-            </span> */}
-            {/* <span className="mx-8">
-              🛍️ <span className="text-red-600">Special Sale</span> Every
-              Holiday – Shop & Save!
-            </span> */}
           </div>
         </div>
       )}
@@ -106,26 +96,51 @@ function Navbar() {
             </NavLink>
           )}
 
-          <NavLink to="/profile" className={navLinkClass}>
-            Profile
-          </NavLink>
-
           <NavLink to="/blog" className={navLinkClass}>
             Blog
           </NavLink>
-          <button
-            onClick={handleLogout}
-            className="hover:text-yellow-300 transition"
-          >
-            Logout
-          </button>
 
-          <button
-            onClick={toggleTheme}
-            className="ml-4 px-3 py-1 rounded bg-white text-black dark:bg-gray-700 dark:text-white"
-          >
-            {theme === "light" ? "🌙 Dark" : "☀️ Light"}
-          </button>
+          {/* ✅ Profile Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <img
+              src={
+                user?.photoURL ||
+                "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+              }
+              alt="Profile"
+              className="h-10 w-10 rounded-full cursor-pointer border-2 border-white"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+            />
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg py-2 z-50">
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Profile Info & Your orders
+                </button>
+                {/* <button
+                  onClick={() => navigate("/orders")}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Your Orders
+                </button> */}
+                <button
+                  onClick={toggleTheme}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -135,62 +150,6 @@ function Navbar() {
         >
           {isOpen ? "✖" : "☰"}
         </button>
-
-        {/* Mobile Dropdown Menu */}
-        {isOpen && (
-          <div className="absolute top-full left-0 w-full bg-green-700 dark:bg-gray-800 flex flex-col gap-4 p-4 md:hidden">
-            {["home", "products", "about"].map((link) => (
-              <NavLink
-                key={link}
-                to={`/${link}`}
-                className={navLinkClass}
-                onClick={() => setIsOpen(false)}
-              >
-                {link.charAt(0).toUpperCase() + link.slice(1)}
-              </NavLink>
-            ))}
-
-            {user?.email !== "admin123@gmail.com" && (
-              <NavLink
-                to="/cart"
-                className={navLinkClass}
-                onClick={() => setIsOpen(false)}
-              >
-                Cart
-                {totalItems > 0 && (
-                  <span className="ml-1 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">
-                    {totalItems}
-                  </span>
-                )}
-              </NavLink>
-            )}
-
-            <NavLink
-              to="/profile"
-              className={navLinkClass}
-              onClick={() => setIsOpen(false)}
-            >
-              Profile
-            </NavLink>
-
-            <button
-              onClick={() => {
-                handleLogout();
-                setIsOpen(false);
-              }}
-              className="hover:text-yellow-300 transition"
-            >
-              Logout
-            </button>
-
-            <button
-              onClick={toggleTheme}
-              className="px-3 py-1 rounded bg-white text-black dark:bg-gray-700 dark:text-white"
-            >
-              {theme === "light" ? "Dark Mode" : "Light Mode"}
-            </button>
-          </div>
-        )}
       </nav>
     </>
   );

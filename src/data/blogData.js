@@ -4,7 +4,7 @@ const blogData = [
     title: "The Hidden Power of Fresh Fruits in Daily Nutrition",
     date: "Feb 15, 2023",
     author: "Onionz Fresh",
-    image: "https://images.unsplash.com/photo-1574226516831-e1dff420e12c",
+    image: "https://randomoutputs.com/assets/images/tools/fruits/guava.webp",
     description:
       "Fresh fruits bring color, flavor, and powerful nutrients to everyday meals, making them a must-have in every household.",
     fullContent: `
@@ -114,7 +114,7 @@ const blogData = [
     title: "The Role of Fruits in Boosting Immunity",
     date: "Aug 10, 2022",
     author: "Maya Krishnan",
-    image: "https://images.unsplash.com/photo-1582515073490-dc98e5d0f6d6",
+    image: "https://lipsum.app/random/1600x900",
     description:
       "Fruits are natural immune boosters, rich in vitamins, antioxidants, and phytonutrients.",
     fullContent: `
@@ -162,7 +162,7 @@ const blogData = [
     title: "The Colorful World of Fruits and What They Mean for Health",
     date: "May 12, 2022",
     author: "Divya Sharma",
-    image: "https://images.unsplash.com/photo-1547516508-7f4a80a98b6e",
+    image: "https://randomoutputs.com/assets/images/tools/fruits/pea.webp",
     description:
       "Each color of fruit represents a unique set of nutrients and health benefits.",
     fullContent: `

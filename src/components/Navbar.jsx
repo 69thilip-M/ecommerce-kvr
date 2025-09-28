@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useState, useEffect, useRef } from "react";
@@ -33,10 +32,8 @@ function Navbar() {
       ? "text-yellow-300 font-semibold"
       : "hover:text-yellow-300 transition";
 
-  // ✅ Cart count = number of unique items
   const totalItems = cart.length;
 
-  // ✅ Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -73,34 +70,35 @@ function Navbar() {
           <span className="text-2xl font-bold">KMR</span>
         </NavLink>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-6 text-lg font-medium items-center">
-          <NavLink to="/home" className={navLinkClass}>
-            Home
-          </NavLink>
-          <NavLink to="/products" className={navLinkClass}>
-            Products
-          </NavLink>
-          <NavLink to="/about" className={navLinkClass}>
-            About
-          </NavLink>
-
-          {user?.email !== "admin123@gmail.com" && (
-            <NavLink to="/cart" className={navLinkClass}>
-              Cart
-              {totalItems > 0 && (
-                <span className="ml-1 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">
-                  {totalItems}
-                </span>
-              )}
+        {/* Desktop Menu + Profile */}
+        <div className="hidden md:flex items-center gap-6">
+          {/* Menu Links */}
+          <div className="flex gap-6 text-lg font-medium items-center">
+            <NavLink to="/home" className={navLinkClass}>
+              Home
             </NavLink>
-          )}
+            <NavLink to="/products" className={navLinkClass}>
+              Products
+            </NavLink>
+            <NavLink to="/about" className={navLinkClass}>
+              About
+            </NavLink>
+            {user?.email !== "admin123@gmail.com" && (
+              <NavLink to="/cart" className={navLinkClass}>
+                Cart
+                {totalItems > 0 && (
+                  <span className="ml-1 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">
+                    {totalItems}
+                  </span>
+                )}
+              </NavLink>
+            )}
+            <NavLink to="/blog" className={navLinkClass}>
+              Blog
+            </NavLink>
+          </div>
 
-          <NavLink to="/blog" className={navLinkClass}>
-            Blog
-          </NavLink>
-
-          {/* ✅ Profile Dropdown */}
+          {/* Profile Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <img
               src={
@@ -111,29 +109,31 @@ function Navbar() {
               className="h-10 w-10 rounded-full cursor-pointer border-2 border-white"
               onClick={() => setDropdownOpen((prev) => !prev)}
             />
-
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg py-2 z-50">
                 <button
-                  onClick={() => navigate("/profile")}
+                  onClick={() => {
+                    navigate("/profile");
+                    setDropdownOpen(false);
+                  }}
                   className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Profile Info & Your orders
                 </button>
-                {/* <button
-                  onClick={() => navigate("/orders")}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Your Orders
-                </button> */}
                 <button
-                  onClick={toggleTheme}
+                  onClick={() => {
+                    toggleTheme();
+                    setDropdownOpen(false);
+                  }}
                   className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
                 </button>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => {
+                    handleLogout();
+                    setDropdownOpen(false);
+                  }}
                   className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Logout
@@ -143,14 +143,106 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-2xl"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? "✖" : "☰"}
-        </button>
+        {/* Mobile: Profile + Hamburger */}
+        <div className="md:hidden flex items-center gap-4">
+          {/* Profile Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <img
+              src={
+                user?.photoURL ||
+                "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+              }
+              alt="Profile"
+              className="h-10 w-10 rounded-full cursor-pointer border-2 border-white"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+            />
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg py-2 z-50">
+                <button
+                  onClick={() => {
+                    navigate("/profile");
+                    setDropdownOpen(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Profile Info & Your orders
+                </button>
+                <button
+                  onClick={() => {
+                    toggleTheme();
+                    setDropdownOpen(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+                </button>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setDropdownOpen(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Hamburger Menu */}
+          <button className="text-2xl" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? "✖" : "☰"}
+          </button>
+        </div>
       </nav>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden w-full bg-green-600 dark:bg-gray-900 shadow-md flex flex-col items-start px-6 py-4 gap-4 z-40">
+          <NavLink
+            to="/home"
+            className={navLinkClass}
+            onClick={() => setIsOpen(false)}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/products"
+            className={navLinkClass}
+            onClick={() => setIsOpen(false)}
+          >
+            Products
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={navLinkClass}
+            onClick={() => setIsOpen(false)}
+          >
+            About
+          </NavLink>
+          {user?.email !== "admin123@gmail.com" && (
+            <NavLink
+              to="/cart"
+              className={navLinkClass}
+              onClick={() => setIsOpen(false)}
+            >
+              Cart
+              {totalItems > 0 && (
+                <span className="ml-1 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">
+                  {totalItems}
+                </span>
+              )}
+            </NavLink>
+          )}
+          <NavLink
+            to="/blog"
+            className={navLinkClass}
+            onClick={() => setIsOpen(false)}
+          >
+            Blog
+          </NavLink>
+        </div>
+      )}
     </>
   );
 }

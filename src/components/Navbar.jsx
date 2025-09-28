@@ -12,9 +12,13 @@ function Navbar() {
   const [user, setUser] = useState(null);
   const [showBanner] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const auth = getAuth();
   const { cart } = useCart();
-  const dropdownRef = useRef(null);
+
+  // Separate refs for desktop and mobile dropdown
+  const desktopDropdownRef = useRef(null);
+  const mobileDropdownRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
@@ -34,15 +38,54 @@ function Navbar() {
 
   const totalItems = cart.length;
 
+  // Close dropdown if click outside
   useEffect(() => {
     function handleClickOutside(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (
+        desktopDropdownRef.current &&
+        !desktopDropdownRef.current.contains(e.target) &&
+        mobileDropdownRef.current &&
+        !mobileDropdownRef.current.contains(e.target)
+      ) {
         setDropdownOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Profile dropdown content (reusable)
+  const ProfileDropdown = () => (
+    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg py-2 z-50">
+      <button
+        onClick={() => {
+          navigate("/profile");
+          setDropdownOpen(false);
+        }}
+        className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+      >
+        Profile Info & Your orders
+      </button>
+      <button
+        onClick={() => {
+          toggleTheme();
+          setDropdownOpen(false);
+        }}
+        className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+      >
+        {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+      </button>
+      <button
+        onClick={() => {
+          handleLogout();
+          setDropdownOpen(false);
+        }}
+        className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+      >
+        Logout
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -99,7 +142,7 @@ function Navbar() {
           </div>
 
           {/* Profile Dropdown */}
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative" ref={desktopDropdownRef}>
             <img
               src={
                 user?.photoURL ||
@@ -109,44 +152,14 @@ function Navbar() {
               className="h-10 w-10 rounded-full cursor-pointer border-2 border-white"
               onClick={() => setDropdownOpen((prev) => !prev)}
             />
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg py-2 z-50">
-                <button
-                  onClick={() => {
-                    navigate("/profile");
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Profile Info & Your orders
-                </button>
-                <button
-                  onClick={() => {
-                    toggleTheme();
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
-                </button>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+            {dropdownOpen && <ProfileDropdown />}
           </div>
         </div>
 
         {/* Mobile: Profile + Hamburger */}
         <div className="md:hidden flex items-center gap-4">
           {/* Profile Dropdown */}
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative" ref={mobileDropdownRef}>
             <img
               src={
                 user?.photoURL ||
@@ -156,37 +169,7 @@ function Navbar() {
               className="h-10 w-10 rounded-full cursor-pointer border-2 border-white"
               onClick={() => setDropdownOpen((prev) => !prev)}
             />
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg py-2 z-50">
-                <button
-                  onClick={() => {
-                    navigate("/profile");
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Profile Info & Your orders
-                </button>
-                <button
-                  onClick={() => {
-                    toggleTheme();
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
-                </button>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+            {dropdownOpen && <ProfileDropdown />}
           </div>
 
           {/* Hamburger Menu */}
